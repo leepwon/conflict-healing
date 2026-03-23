@@ -1,23 +1,112 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { supabase } from "./lib/supabase";
 
 function Navbar({ session, onLogout }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [homeMenuOpen, setHomeMenuOpen] = useState(false);
+
+  const goHomeTop = () => {
+    setHomeMenuOpen(false);
+
+    if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 150);
+    }
+  };
+
+  const goHomeSection = (sectionId) => {
+    setHomeMenuOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 200);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <p className="text-xs tracking-[0.2em] uppercase text-[#8c6b2f] font-semibold">
-            Dongguk University WISE Campus
+            DONGGUK UNIVERSITY WISE CAMPUS
           </p>
           <h1 className="text-lg font-bold text-[#6f0f14]">갈등치유연구소</h1>
         </div>
 
         <nav className="flex items-center gap-6 text-sm font-bold text-slate-800">
-          <Link to="/">홈</Link>
-          <Link to="/board">게시판</Link>
-          <Link to="/archive">자료실</Link>
-          <Link to="/admin">관리자</Link>
+          <div
+            className="relative"
+            onMouseEnter={() => setHomeMenuOpen(true)}
+            onMouseLeave={() => setHomeMenuOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={goHomeTop}
+              className="hover:text-[#6f0f14]"
+            >
+              홈
+            </button>
+
+            {homeMenuOpen && (
+              <div className="absolute left-1/2 top-full mt-3 w-44 -translate-x-1/2 rounded-md border border-slate-200 bg-white shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => goHomeSection("purpose")}
+                  className="block w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-[#f9f4ec] hover:text-[#6f0f14]"
+                >
+                  설립목적
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goHomeSection("research-content")}
+                  className="block w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-[#f9f4ec] hover:text-[#6f0f14]"
+                >
+                  연구내용
+                </button>
+                <a
+                  href="https://rule.dongguk.edu/lmxsrv/main/main.srv"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block px-4 py-3 text-left text-sm text-slate-700 hover:bg-[#f9f4ec] hover:text-[#6f0f14]"
+                >
+                  연구소 규정
+                </a>
+              </div>
+            )}
+          </div>
+
+          <Link to="/board" className="hover:text-[#6f0f14]">
+            게시판
+          </Link>
+          <Link to="/archive" className="hover:text-[#6f0f14]">
+            자료실
+          </Link>
+          <Link to="/admin" className="hover:text-[#6f0f14]">
+            관리자
+          </Link>
 
           {session && (
             <button
@@ -38,38 +127,123 @@ function WarningBanner() {
 
   return (
     <div className="max-w-4xl mx-auto mt-6 bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 text-sm">
-      Supabase 환경변수가 아직 연결되지 않았습니다. 자료실 업로드 기능은 동작하지 않을 수 있습니다.
+      Supabase 환경변수가 아직 연결되지 않았습니다. 자료실 업로드 기능은 동작하지 않을 수
+      있습니다.
     </div>
   );
 }
 
 function Home() {
   return (
-    <section
-      className="min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url('/wise-hero.png')",
-      }}
-    >
-      <div className="min-h-screen flex items-center justify-center text-center text-white px-6">
-        <div>
-          <p className="text-sm tracking-[0.25em] uppercase text-yellow-200 font-semibold">
-            Dongguk University WISE Campus
-          </p>
+    <>
+      <section
+        className="min-h-screen bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url('/wise-hero.png')",
+        }}
+      >
+        <div className="min-h-screen flex items-center justify-center text-center text-white px-6">
+          <div>
+            <p className="text-sm tracking-[0.25em] uppercase text-yellow-200 font-semibold">
+              DONGGUK UNIVERSITY WISE CAMPUS
+            </p>
 
-          <h2 className="mt-6 text-5xl md:text-7xl font-bold leading-tight">
-            동국대학교 WISE캠퍼스
-            <br />
-            갈등치유연구소
-          </h2>
+            <h2 className="mt-6 text-5xl md:text-7xl font-bold leading-tight">
+              동국대학교 WISE캠퍼스
+              <br />
+              갈등치유연구소
+            </h2>
 
-          <p className="mt-6 text-lg md:text-2xl">
-            Conflict Healing Research Institute
-          </p>
+            <p className="mt-6 text-lg md:text-2xl">
+              Conflict Healing Research Institute
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section id="purpose" className="max-w-6xl mx-auto px-6 py-24">
+        <div className="bg-white border border-slate-200 p-10 shadow-sm">
+          <p className="text-sm tracking-[0.22em] uppercase text-[#8c6b2f] font-semibold">
+            Purpose of Establishment
+          </p>
+          <h3 className="mt-3 text-3xl font-bold text-[#6f0f14]">설립목적</h3>
+
+          <p className="mt-6 text-base leading-8 text-slate-700">
+            학제간 융합연구를 통하여 개인 및 사회갈등 치유에 공헌할 학술 연구와 교육을 통한
+            인재양성을 목적으로 합니다. 개인주의 및 민주화, 삶의 질에 대한 욕구 증대로 개인 및
+            사회갈등이 심화되는 현실 속에서, 불교를 건학이념으로 하는 동국대학교 WISE캠퍼스에
+            갈등치유연구소를 두어 갈등치유 관련 연구와 교육에 이바지하고자 합니다.
+          </p>
+
+          <ul className="mt-6 list-disc pl-6 space-y-3 text-slate-700 leading-8">
+            <li>
+              사회갈등 치유의 이론과 기법을 연구하여 관련 종사자와 당사자들이 쉽게 활용하도록
+              돕습니다.
+            </li>
+            <li>
+              교육과 훈련을 통하여 사회갈등을 효과적으로 치유할 전문인력 양성에 이바지합니다.
+            </li>
+            <li>갈등 현장에 직접 참여하여 문제 해결과 당사자 치유에 봉사합니다.</li>
+            <li>사회갈등의 과학적 접근을 통해 갈등산업 육성의 기반 조성에 힘씁니다.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="research-content" className="max-w-6xl mx-auto px-6 pb-24">
+        <div className="bg-white border border-slate-200 p-10 shadow-sm">
+          <p className="text-sm tracking-[0.22em] uppercase text-[#8c6b2f] font-semibold">
+            Research Content
+          </p>
+          <h3 className="mt-3 text-3xl font-bold text-[#6f0f14]">연구내용</h3>
+
+          <p className="mt-6 text-base leading-8 text-slate-700">
+            본 연구소는 갈등의 쟁점뿐 아니라 갈등당사자인 사람에 초점을 둔{" "}
+            <span className="font-semibold">치유의 관점</span>에서 사회갈등에 접근합니다.
+            특히 환경과 에너지 분야에서 발생하는 지역사회갈등의 해결에 초점을 맞추어 활동합니다.
+          </p>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {[
+              "맞춤형 갈등치유 프로그램 개발",
+              "갈등치유 관리인력 교육",
+              "갈등중재 및 협상(공청회 개최 대행 등)",
+              "지역사회갈등 해결을 위한 참여와 봉사",
+              "「공공기관의 갈등예방과 해결에 관한 규정」이 규정하는 공공갈등의 분석",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-lg border border-slate-200 bg-[#faf7f2] px-5 py-4 text-slate-700"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="regulations" className="max-w-6xl mx-auto px-6 pb-24">
+        <div className="bg-white border border-slate-200 p-10 shadow-sm">
+          <p className="text-sm tracking-[0.22em] uppercase text-[#8c6b2f] font-semibold">
+            Research Institute Regulations
+          </p>
+          <h3 className="mt-3 text-3xl font-bold text-[#6f0f14]">연구소 규정</h3>
+
+          <p className="mt-6 text-base leading-8 text-slate-700">
+            연구소 규정은 동국대학교 규정 시스템에서 확인할 수 있습니다.
+          </p>
+
+          <a
+            href="https://rule.dongguk.edu/lmxsrv/main/main.srv"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block mt-6 bg-[#6f0f14] px-6 py-3 text-white font-bold"
+          >
+            연구소 규정 보기
+          </a>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -413,27 +587,6 @@ function Admin({ session, onLoginSuccess }) {
   );
 }
 
-
-export default function App() {
-  const [session, setSession] = useState(null);
-
-  useEffect(() => {
-    if (!supabase) return;
-
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
 function Archive({ session }) {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -441,10 +594,8 @@ function Archive({ session }) {
   const [loading, setLoading] = useState(true);
 
   const [isWriting, setIsWriting] = useState(false);
-
   const [searchField, setSearchField] = useState("title");
   const [searchKeyword, setSearchKeyword] = useState("");
-
   const [form, setForm] = useState({
     title: "",
     is_notice: false,
@@ -465,12 +616,7 @@ function Archive({ session }) {
       console.error(error);
       alert("자료 목록을 불러오지 못했습니다.");
     } else {
-      setPapers(
-        (data || []).map((item, index) => ({
-          ...item,
-          display_no: item.is_notice ? "공지" : String((data || []).length - index),
-        }))
-      );
+      setPapers(data || []);
     }
 
     setLoading(false);
@@ -791,9 +937,7 @@ function Archive({ session }) {
                   : "-"}
               </div>
 
-              <div className="text-center text-slate-700">
-                {paper.view_count || 0}
-              </div>
+              <div className="text-center text-slate-700">{paper.view_count || 0}</div>
 
               {session && (
                 <div className="col-span-6 mt-2 flex justify-end">
@@ -812,6 +956,28 @@ function Archive({ session }) {
     </div>
   );
 }
+
+export default function App() {
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    if (!supabase) return;
+
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   const handleLogout = async () => {
     if (!supabase) return;
     await supabase.auth.signOut();
