@@ -257,7 +257,12 @@ function RegulationsPage() {
 }
 
 function Board({ session }) {
-  const defaultPosts = [
+  const NOTICE_STORAGE_KEY = "dongguk-board-posts-v2";
+  const HISTORY_STORAGE_KEY = "dongguk-history-extra";
+  const CONF_STORAGE_KEY = "dongguk-conference-extra";
+  const PERFORMANCE_STORAGE_KEY = "dongguk-performance-extra";
+
+  const defaultNoticePosts = [
     {
       id: 1,
       category: "공지",
@@ -265,532 +270,600 @@ function Board({ session }) {
       content:
         "동국대학교 WISE캠퍼스 갈등치유연구소 홈페이지가 시범 운영 중입니다. 게시판과 자료실 기능을 순차적으로 정비할 예정입니다.",
       date: "2026.03.16",
+      isNotice: true,
+    },
+    {
+      id: 2,
+      category: "학술행사",
+      title: "갈등치유 국제학술대회 발표자 모집",
+      content:
+        "학술대회 발표를 희망하시는 연구자께서는 초록을 제출해 주시기 바랍니다.",
+      date: "2026.03.15",
+      isNotice: false,
     },
   ];
 
-  const [posts, setPosts] = useState(() => {
-    const saved = localStorage.getItem("dongguk-board-posts");
-    return saved ? JSON.parse(saved) : defaultPosts;
+  const defaultHistory = [
+    { id: "h1", ym: "2011-09", content: "갈등치유연구소 설립" },
+    {
+      id: "h2",
+      ym: "2011-12",
+      content:
+        "갈등치유연구소 부설 사회갈등치유연구센터, 관계치유연구소, 마음 뇌 연구센터, 심신의학연구소, 철학치유연구소 설치",
+    },
+    { id: "h3", ym: "2012-01", content: "갈등치유연구소 부설 센터 운영 규정 제정" },
+    { id: "h4", ym: "2012-06", content: "총서 개발 : 갈등치유론(한국학술정보, 2012년)" },
+    {
+      id: "h5",
+      ym: "2012-08",
+      content:
+        "갈등치유연구소 네이버 cafe 개발 및 운영 / 방폐물 지역수용성 문제와 환경안전을 위한 연구용역",
+    },
+    {
+      id: "h6",
+      ym: "2012-10",
+      content: "방폐장 유치에 따른 경주지역 경제유발 효과와 지역협력 증대방안 연구용역",
+    },
+    { id: "h7", ym: "2013-03", content: "경주시 힐링시티 조성을 위한 전문가 워크샵" },
+    {
+      id: "h8",
+      ym: "2013-05",
+      content: "'사용후핵연료' 공론화에 대비한 전문가 워크샵",
+    },
+    {
+      id: "h9",
+      ym: "2013-06",
+      content: "정책자료집 발간 : 사용후핵연료 공론화와 사회갈등",
+    },
+    {
+      id: "h10",
+      ym: "2013-08",
+      content: "갈등치유연구소 부설 경관치유센터 설치 / 한국갈등관리학회와 MOU협약식 및 공동학술세미나 개최",
+    },
+    { id: "h11", ym: "2013-09", content: "제2기 갈등관리 아카데미 위탁교육 용역" },
+    { id: "h12", ym: "2013-12", content: "2013 영남지역 대학생 공공갈등관리 논문공모전 시상식" },
+    {
+      id: "h13",
+      ym: "2014-01",
+      content: "발전소 주변지역 지원제도와 주요쟁점 파악 및 법정 통합기금 조성 방안 연구",
+    },
+    {
+      id: "h14",
+      ym: "2014-03",
+      content: "송변전주변지역 지원대상 조사 및 세부기준 연구용역",
+    },
+    { id: "h15", ym: "2014-05", content: "2014년 제2회 갈등치유연구소 콜로퀴움" },
+    {
+      id: "h16",
+      ym: "2014-07",
+      content: "play & pray(놀이와 염원) - power of god, power of human",
+    },
+    {
+      id: "h17",
+      ym: "2014-08",
+      content: "경주시 빅데이터 센터 설립 추진을 위한 제1차 워크숍",
+    },
+    { id: "h18", ym: "2014-12", content: "2014년 영남지역 대학생 공공갈등관리 논문공모전 시상식" },
+    { id: "h19", ym: "2015-11", content: "2015년 제3회 갈등치유연구소 콜로퀴움" },
+    { id: "h20", ym: "2015-12", content: "2015년 영남지역 대학생 공공갈등관리 논문공모전 시상식" },
+    { id: "h21", ym: "2016-08", content: "에너지시민소통연합 수강생 인식조사" },
+    {
+      id: "h22",
+      ym: "2016-11",
+      content: "2016년 제4회 갈등치유연구소 콜로퀴움 / 연구과제 수행을 위한 전문가 포럼",
+    },
+    {
+      id: "h23",
+      ym: "2016-12",
+      content: "미래에너지 대안에너지를 위한 에너지시민소통포럼 타운홀미팅 참여",
+    },
+  ];
+
+  const defaultConferences = [
+    {
+      id: "c1",
+      title: "갈등치유연구소 콜로키움-인도종교에서의 갈등의 딜레마",
+      period: "2024-12-19",
+      place: "ZOOM 온라인",
+      papers: "1편",
+      presenters: "1명",
+      cost: "0천원",
+    },
+    {
+      id: "c2",
+      title: "갈등치유연구소 콜로키움-헤겔철학에서 불행한 의식과 소외의 갈등",
+      period: "2024-10-31",
+      place: "ZOOM 온라인",
+      papers: "1편",
+      presenters: "1명",
+      cost: "0천원",
+    },
+    {
+      id: "c3",
+      title: "갈등치유연구소-타이치학회 2024년도 하계 공동학술대회",
+      period: "2024-08-31",
+      place: "밝은빛 태극권 4층",
+      papers: "3편",
+      presenters: "4명",
+      cost: "0천원",
+    },
+    {
+      id: "c4",
+      title: "갈등치유연구소 콜로키움-Mind Gap",
+      period: "2023-10-13",
+      place: "ZOOM 온라인",
+      papers: "1편",
+      presenters: "1명",
+      cost: "0천원",
+    },
+    {
+      id: "c5",
+      title: "갈등치유연구소 하계 학술대회",
+      period: "2023-08-04",
+      place: "동국대학교 와이즈캠퍼스 원효관 307",
+      papers: "3편",
+      presenters: "4명",
+      cost: "300천원",
+    },
+    {
+      id: "c6",
+      title: "2018년도 한국종교학회 춘계학술대회 : 갈등치유와 종교교육",
+      period: "2018-04-20",
+      place: "동국대학교 경주캠퍼스",
+      papers: "8편",
+      presenters: "8명",
+      cost: "0천원",
+    },
+    {
+      id: "c7",
+      title: "전문가 타운홀미팅",
+      period: "2016-12-02",
+      place: "경주 코모도호텔",
+      papers: "0편",
+      presenters: "1명",
+      cost: "0천원",
+    },
+    {
+      id: "c8",
+      title: "연구과제수행을 위한 전문가 포럼",
+      period: "2016-11-28",
+      place: "동국대학교 교수회 회의실",
+      papers: "1편",
+      presenters: "1명",
+      cost: "0천원",
+    },
+    {
+      id: "c9",
+      title: "제4회 갈등치유연구소 콜로키움",
+      period: "2016-11-11",
+      place: "동국대학교 교수회 회의실",
+      papers: "1편",
+      presenters: "1명",
+      cost: "0천원",
+    },
+  ];
+
+  const defaultPerformances = [
+    {
+      id: "p1",
+      type: "단독연구",
+      title: "원전에 대한 주민 경험인식(heuristic cognition) 구성요소와 형성과정",
+      manager: "오영석",
+      researchers: "5명",
+      period: "2016-11-01 ~ 2017-06-30",
+      supportType: "기타",
+      budget: "77,000천원",
+      agency: "경희대학교산학협력단",
+    },
+    {
+      id: "p2",
+      type: "단독연구",
+      title: "발전소 인근지역 주민 집단이주제도의 타당성 고찰 및 합리적 제도개선 방안 연구",
+      manager: "오영석",
+      researchers: "6명",
+      period: "2015-08-01 ~ 2016-01-31",
+      supportType: "중앙정부",
+      budget: "67,500천원",
+      agency: "산업통상자원부",
+    },
+    {
+      id: "p3",
+      type: "산학협동",
+      title: "사용후핵연료 관리방안에 대한 원전지역 의견수렴 지원용역",
+      manager: "오영석",
+      researchers: "8명",
+      period: "2014-12-17 ~ 2015-06-16",
+      supportType: "기타",
+      budget: "533,635천원",
+      agency: "한국원자력환경공단",
+    },
+    {
+      id: "p4",
+      type: "단독연구",
+      title: "현 발전소 주변지역 지원제도의 주요 쟁점 파악 및 법정 통합기금 조성 방안 연구",
+      manager: "오영석",
+      researchers: "2명",
+      period: "2013-11-01 ~ 2014-01-31",
+      supportType: "기타",
+      budget: "16,500천원",
+      agency: "에너지경제연구원",
+    },
+    {
+      id: "p5",
+      type: "단독연구",
+      title: "제2기 갈등관리 아카데미 위탁교육",
+      manager: "오영석",
+      researchers: "4명",
+      period: "2013-03-25 ~ 2013-09-27",
+      supportType: "기타",
+      budget: "15,897천원",
+      agency: "방사선환경시민포럼",
+    },
+    {
+      id: "p6",
+      type: "단독연구",
+      title: "방폐장 유치에 따른 경주지역 경제유발 효과와 지역협력 증대방안 연구용역",
+      manager: "오영석",
+      researchers: "4명",
+      period: "2012-07-23 ~ 2012-10-20",
+      supportType: "기타",
+      budget: "27,500천원",
+      agency: "한국방사성폐기물관리공단",
+    },
+    {
+      id: "p7",
+      type: "단독연구",
+      title: "지역수용성 조사 용역",
+      manager: "오영석",
+      researchers: "2명",
+      period: "2011-12-21 ~ 2012-01-10",
+      supportType: "기타",
+      budget: "18,200천원",
+      agency: "한국방사성폐기물관리공단",
+    },
+    {
+      id: "p8",
+      type: "단독연구",
+      title: "갈등관리 및 지역사회 협력 과정 위탁교육",
+      manager: "오영석",
+      researchers: "8명",
+      period: "2011-03-11 ~ 2012-02-28",
+      supportType: "기타",
+      budget: "102,000천원",
+      agency: "한국방사성폐기물관리공단",
+    },
+    {
+      id: "p9",
+      type: "단독연구",
+      title: "감정이입과 통합사고에 기반한 사회갈등 치유",
+      manager: "오영석",
+      researchers: "7명",
+      period: "2010-09-01 ~ 2011-08-31",
+      supportType: "기타",
+      budget: "58,338천원",
+      agency: "한국연구재단",
+    },
+    {
+      id: "p10",
+      type: "단독연구",
+      title: "지역 발전을 위한 기업의 사회적 책임과 지역사회의 역할",
+      manager: "오영석",
+      researchers: "12명",
+      period: "2010-07-30 ~ 2011-03-31",
+      supportType: "기타",
+      budget: "173,600천원",
+      agency: "사단법인 포항지역발전 협의회",
+    },
+    {
+      id: "p11",
+      type: "단독연구",
+      title: "발전소 주변지역 지원사업비의 평가 및 활용방안 도출",
+      manager: "오영석",
+      researchers: "4명",
+      period: "2010-04-01 ~ 2010-08-31",
+      supportType: "중앙정부",
+      budget: "30,000천원",
+      agency: "지식경제부",
+    },
+  ];
+
+  const [activeTab, setActiveTab] = useState("notice");
+
+  const [noticePosts, setNoticePosts] = useState(() => {
+    const saved = localStorage.getItem(NOTICE_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : defaultNoticePosts;
   });
+
+  const [historyItems, setHistoryItems] = useState(() => {
+    const extra = localStorage.getItem(HISTORY_STORAGE_KEY);
+    return extra ? [...defaultHistory, ...JSON.parse(extra)] : defaultHistory;
+  });
+
+  const [conferenceItems, setConferenceItems] = useState(() => {
+    const extra = localStorage.getItem(CONF_STORAGE_KEY);
+    return extra ? [...defaultConferences, ...JSON.parse(extra)] : defaultConferences;
+  });
+
+  const [performanceItems, setPerformanceItems] = useState(() => {
+    const extra = localStorage.getItem(PERFORMANCE_STORAGE_KEY);
+    return extra ? [...defaultPerformances, ...JSON.parse(extra)] : defaultPerformances;
+  });
+
   const [selectedPost, setSelectedPost] = useState(null);
   const [isWriting, setIsWriting] = useState(false);
-  const [form, setForm] = useState({ category: "일반", title: "", content: "" });
+
+  const [noticeForm, setNoticeForm] = useState({
+    category: "일반",
+    title: "",
+    content: "",
+    isNotice: false,
+  });
+
+  const [historyForm, setHistoryForm] = useState({
+    ym: "",
+    content: "",
+  });
+
+  const [conferenceForm, setConferenceForm] = useState({
+    title: "",
+    period: "",
+    place: "",
+    papers: "",
+    presenters: "",
+    cost: "",
+  });
+
+  const [performanceForm, setPerformanceForm] = useState({
+    type: "",
+    title: "",
+    manager: "",
+    researchers: "",
+    period: "",
+    supportType: "",
+    budget: "",
+    agency: "",
+  });
 
   useEffect(() => {
-    localStorage.setItem("dongguk-board-posts", JSON.stringify(posts));
-  }, [posts]);
+    localStorage.setItem(NOTICE_STORAGE_KEY, JSON.stringify(noticePosts));
+  }, [noticePosts]);
 
-  const addPost = () => {
-    if (!form.title.trim() || !form.content.trim()) {
+  const saveExtraHistory = (items) => {
+    const extra = items.filter((item) => !String(item.id).startsWith("h"));
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(extra));
+  };
+
+  const saveExtraConference = (items) => {
+    const extra = items.filter((item) => !String(item.id).startsWith("c"));
+    localStorage.setItem(CONF_STORAGE_KEY, JSON.stringify(extra));
+  };
+
+  const saveExtraPerformance = (items) => {
+    const extra = items.filter((item) => !String(item.id).startsWith("p"));
+    localStorage.setItem(PERFORMANCE_STORAGE_KEY, JSON.stringify(extra));
+  };
+
+  const sortedNoticePosts = [...noticePosts].sort((a, b) => {
+    if ((a.isNotice ? 1 : 0) !== (b.isNotice ? 1 : 0)) {
+      return (b.isNotice ? 1 : 0) - (a.isNotice ? 1 : 0);
+    }
+    return b.id - a.id;
+  });
+
+  const addNoticePost = () => {
+    if (!noticeForm.title.trim() || !noticeForm.content.trim()) {
       alert("제목과 내용을 입력해 주세요.");
       return;
     }
 
     const today = new Date();
-    const date = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, "0")}.${String(
-      today.getDate()
-    ).padStart(2, "0")}`;
+    const date = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}.${String(today.getDate()).padStart(2, "0")}`;
 
     const newPost = {
       id: Date.now(),
-      category: form.category,
-      title: form.title.trim(),
-      content: form.content.trim(),
+      category: noticeForm.category,
+      title: noticeForm.title.trim(),
+      content: noticeForm.content.trim(),
       date,
+      isNotice: noticeForm.isNotice,
     };
 
-    setPosts((prev) => [newPost, ...prev]);
+    setNoticePosts((prev) => [...prev, newPost]);
     setSelectedPost(newPost);
-    setForm({ category: "일반", title: "", content: "" });
+    setNoticeForm({
+      category: "일반",
+      title: "",
+      content: "",
+      isNotice: false,
+    });
     setIsWriting(false);
   };
 
-  const deletePost = (id) => {
+  const deleteNoticePost = (id) => {
     if (!session) {
       alert("로그인 후 삭제할 수 있습니다.");
       return;
     }
-    const nextPosts = posts.filter((p) => p.id !== id);
-    setPosts(nextPosts);
-    if (selectedPost?.id === id) setSelectedPost(nextPosts[0] || null);
+
+    const nextPosts = noticePosts.filter((p) => p.id !== id);
+    setNoticePosts(nextPosts);
+
+    if (selectedPost?.id === id) {
+      setSelectedPost(nextPosts.length > 0 ? nextPosts[0] : null);
+    }
+  };
+
+  const addHistoryItem = () => {
+    if (!historyForm.ym.trim() || !historyForm.content.trim()) {
+      alert("연월과 내용을 입력해 주세요.");
+      return;
+    }
+
+    const newItem = {
+      id: `hx-${Date.now()}`,
+      ym: historyForm.ym.trim(),
+      content: historyForm.content.trim(),
+    };
+
+    const next = [newItem, ...historyItems];
+    setHistoryItems(next);
+    saveExtraHistory(next);
+    setHistoryForm({ ym: "", content: "" });
+    setIsWriting(false);
+  };
+
+  const addConferenceItem = () => {
+    if (!conferenceForm.title.trim() || !conferenceForm.period.trim()) {
+      alert("학술대회명과 개최일을 입력해 주세요.");
+      return;
+    }
+
+    const newItem = {
+      id: `cx-${Date.now()}`,
+      ...conferenceForm,
+    };
+
+    const next = [newItem, ...conferenceItems];
+    setConferenceItems(next);
+    saveExtraConference(next);
+    setConferenceForm({
+      title: "",
+      period: "",
+      place: "",
+      papers: "",
+      presenters: "",
+      cost: "",
+    });
+    setIsWriting(false);
+  };
+
+  const addPerformanceItem = () => {
+    if (!performanceForm.title.trim() || !performanceForm.period.trim()) {
+      alert("연구과제명과 연구기간을 입력해 주세요.");
+      return;
+    }
+
+    const newItem = {
+      id: `px-${Date.now()}`,
+      ...performanceForm,
+    };
+
+    const next = [newItem, ...performanceItems];
+    setPerformanceItems(next);
+    saveExtraPerformance(next);
+    setPerformanceForm({
+      type: "",
+      title: "",
+      manager: "",
+      researchers: "",
+      period: "",
+      supportType: "",
+      budget: "",
+      agency: "",
+    });
+    setIsWriting(false);
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-24">
+    <div className="max-w-7xl mx-auto px-6 py-24">
       <h2 className="text-3xl font-bold text-[#6f0f14] mb-8">게시판</h2>
 
-      <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
-        <div>
-          {isWriting && session && (
-            <div className="bg-white border border-slate-200 p-6 shadow-sm mb-8">
-              <p className="text-sm font-medium text-[#8c6b2f] mb-4">새 글 작성</p>
-
-              <div className="grid gap-4">
-                <select
-                  value={form.category}
-                  onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}
-                  className="border border-slate-300 px-4 py-3 outline-none"
-                >
-                  <option value="일반">일반</option>
-                  <option value="공지">공지</option>
-                  <option value="학술행사">학술행사</option>
-                  <option value="연구성과">연구성과</option>
-                  <option value="세미나">세미나</option>
-                </select>
-
-                <input
-                  value={form.title}
-                  onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
-                  className="border border-slate-300 px-4 py-3 outline-none"
-                  placeholder="게시글 제목"
-                />
-
-                <textarea
-                  value={form.content}
-                  onChange={(e) => setForm((prev) => ({ ...prev, content: e.target.value }))}
-                  className="min-h-[180px] border border-slate-300 px-4 py-3 outline-none"
-                  placeholder="게시글 내용"
-                />
-
-                <div className="flex gap-3">
-                  <button onClick={addPost} className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white">
-                    글 등록
-                  </button>
-                  <button
-                    onClick={() => setIsWriting(false)}
-                    className="border border-slate-300 px-6 py-3 text-sm font-bold text-slate-700"
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="overflow-hidden bg-white border border-slate-200 shadow-sm">
-            <div className="grid grid-cols-[110px_1fr_110px_90px] border-b border-slate-200 bg-[#f9f4ec] px-6 py-4 text-sm font-medium text-slate-500">
-              <span>분류</span>
-              <span>제목</span>
-              <span>날짜</span>
-              <span>관리</span>
-            </div>
-
-            {posts.map((item) => (
-              <div
-                key={item.id}
-                className="grid grid-cols-[110px_1fr_110px_90px] items-center border-b border-slate-100 px-6 py-5 text-sm last:border-b-0"
-              >
-                <span className="text-slate-500">{item.category}</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedPost(item)}
-                  className="text-left font-medium text-slate-800 hover:text-[#6f0f14] hover:underline"
-                >
-                  {item.title}
-                </button>
-                <span className="text-slate-500">{item.date}</span>
-                {session ? (
-                  <button
-                    type="button"
-                    onClick={() => deletePost(item.id)}
-                    className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                  >
-                    삭제
-                  </button>
-                ) : (
-                  <span className="text-xs text-slate-400">-</span>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {session && !isWriting && (
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setIsWriting(true)}
-                className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
-              >
-                글쓰기
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div>
-          <div className="bg-white border border-slate-200 p-8 shadow-sm">
-            <h3 className="text-2xl font-bold text-[#6f0f14] mb-6">게시글 상세</h3>
-            {selectedPost ? (
-              <>
-                <div className="flex items-center gap-3">
-                  <span className="bg-[#f9f4ec] px-3 py-1 text-xs font-medium text-[#6f0f14]">
-                    {selectedPost.category}
-                  </span>
-                  <span className="text-sm text-slate-500">{selectedPost.date}</span>
-                </div>
-                <h4 className="mt-4 text-2xl font-bold text-slate-800">{selectedPost.title}</h4>
-                <div className="mt-6 bg-[#f9f4ec] p-6 text-base leading-8 text-slate-700 whitespace-pre-wrap">
-                  {selectedPost.content}
-                </div>
-              </>
-            ) : (
-              <div className="text-slate-500">왼쪽 목록에서 게시글 제목을 클릭하면 상세 내용이 표시됩니다.</div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Admin({ session, onLoginSuccess }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-
-  const login = async () => {
-    if (!supabase) {
-      alert("Supabase 환경변수가 연결되지 않았습니다.");
-      return;
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("로그인 성공");
-      onLoginSuccess?.();
-    }
-  };
-
-  const changePassword = async () => {
-    if (!supabase) {
-      alert("Supabase 환경변수가 연결되지 않았습니다.");
-      return;
-    }
-
-    if (!newPassword.trim()) {
-      alert("새 비밀번호를 입력해 주세요.");
-      return;
-    }
-
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("비밀번호가 변경되었습니다.");
-      setNewPassword("");
-    }
-  };
-
-  return (
-    <div className="max-w-xl mx-auto px-6 py-24">
-      <h2 className="text-3xl font-bold text-[#6f0f14] mb-8">관리자</h2>
-
-      {!session ? (
-        <div className="bg-white border border-slate-200 p-6 shadow-sm space-y-4">
-          <input
-            type="email"
-            placeholder="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-slate-300 px-4 py-3 outline-none"
-          />
-          <input
-            type="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-slate-300 px-4 py-3 outline-none"
-          />
-          <button onClick={login} className="bg-[#6f0f14] px-5 py-3 text-white font-bold">
-            로그인
-          </button>
-        </div>
-      ) : (
-        <div className="bg-white border border-slate-200 p-6 shadow-sm space-y-6">
-          <div>
-            <p className="text-sm text-slate-500 mb-2">현재 로그인된 계정</p>
-            <p className="font-semibold text-slate-800">{session.user.email}</p>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium mb-2 text-slate-700">비밀번호 변경</p>
-            <input
-              type="password"
-              placeholder="새 비밀번호"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full border border-slate-300 px-4 py-3 outline-none"
-            />
-            <button
-              onClick={changePassword}
-              className="mt-3 bg-[#6f0f14] px-5 py-3 text-white font-bold"
-            >
-              비밀번호 변경
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Archive({ session }) {
-  const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [papers, setPapers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isWriting, setIsWriting] = useState(false);
-  const [searchField, setSearchField] = useState("title");
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [form, setForm] = useState({ title: "", is_notice: false });
-
-  const loadPapers = async () => {
-    if (!supabase) return;
-
-    setLoading(true);
-
-    const { data, error } = await supabase
-      .from("papers")
-      .select("*")
-      .order("is_notice", { ascending: false })
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      alert("자료 목록을 불러오지 못했습니다.");
-    } else {
-      setPapers(data || []);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    loadPapers();
-  }, []);
-
-  const makeSafeFileName = (name) => {
-    const lastDotIndex = name.lastIndexOf(".");
-    const base = lastDotIndex >= 0 ? name.slice(0, lastDotIndex) : name;
-    const ext = lastDotIndex >= 0 ? name.slice(lastDotIndex).toLowerCase() : "";
-
-    const safeBase = base
-      .normalize("NFKD")
-      .replace(/[^\w\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .toLowerCase();
-
-    return `${safeBase || "file"}${ext}`;
-  };
-
-  const upload = async () => {
-    if (!supabase) {
-      alert("Supabase 환경변수가 연결되지 않았습니다.");
-      return;
-    }
-    if (!session) {
-      alert("로그인 후 등록할 수 있습니다.");
-      return;
-    }
-    if (!form.title.trim()) {
-      alert("제목을 입력해 주세요.");
-      return;
-    }
-    if (!file) {
-      alert("파일을 선택해 주세요.");
-      return;
-    }
-
-    try {
-      setUploading(true);
-
-      const safeFileName = makeSafeFileName(file.name);
-      const filePath = `uploads/${Date.now()}-${safeFileName}`;
-
-      const { error: uploadError } = await supabase.storage.from("papers").upload(filePath, file);
-      if (uploadError) {
-        alert(uploadError.message);
-        return;
-      }
-
-      const { error: insertError } = await supabase.from("papers").insert({
-        title: form.title.trim(),
-        file_name: file.name,
-        file_path: filePath,
-        is_notice: form.is_notice,
-        author_name: "관리자",
-        view_count: 0,
-      });
-
-      if (insertError) {
-        alert(insertError.message);
-        return;
-      }
-
-      alert("등록되었습니다.");
-      setFile(null);
-      setForm({ title: "", is_notice: false });
-      setIsWriting(false);
-      await loadPapers();
-    } catch (err) {
-      console.error(err);
-      alert("등록 중 오류가 발생했습니다.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const deletePaper = async (paper) => {
-    if (!supabase) {
-      alert("Supabase 환경변수가 연결되지 않았습니다.");
-      return;
-    }
-    if (!session) {
-      alert("로그인 후 삭제할 수 있습니다.");
-      return;
-    }
-
-    const ok = confirm(`"${paper.file_name}" 파일을 삭제하시겠습니까?`);
-    if (!ok) return;
-
-    const { error: storageError } = await supabase.storage.from("papers").remove([paper.file_path]);
-    if (storageError) {
-      alert(storageError.message);
-      return;
-    }
-
-    const { error: dbError } = await supabase.from("papers").delete().eq("id", paper.id);
-    if (dbError) {
-      alert(dbError.message);
-      return;
-    }
-
-    await loadPapers();
-  };
-
-  const openFile = async (paper) => {
-    if (!supabase) return;
-
-    const { error: updateError } = await supabase
-      .from("papers")
-      .update({ view_count: (paper.view_count || 0) + 1 })
-      .eq("id", paper.id);
-
-    if (!updateError) {
-      setPapers((prev) =>
-        prev.map((item) =>
-          item.id === paper.id ? { ...item, view_count: (item.view_count || 0) + 1 } : item
-        )
-      );
-    }
-
-    const { data } = supabase.storage.from("papers").getPublicUrl(paper.file_path);
-    window.open(data.publicUrl, "_blank", "noopener,noreferrer");
-  };
-
-  const filteredPapers = papers.filter((paper) => {
-    if (!searchKeyword.trim()) return true;
-    const keyword = searchKeyword.trim().toLowerCase();
-
-    if (searchField === "title") {
-      return (paper.title || "").toLowerCase().includes(keyword);
-    }
-
-    return (
-      (paper.title || "").toLowerCase().includes(keyword) ||
-      (paper.file_name || "").toLowerCase().includes(keyword)
-    );
-  });
-
-  return (
-    <div className="max-w-6xl mx-auto px-6 py-24">
-      <h2 className="text-4xl font-bold text-center text-slate-900">자료실</h2>
-
-      <div className="mt-10 border-t border-[#a5b84b] pt-10">
-        <div className="flex justify-end gap-2">
-          <select
-            value={searchField}
-            onChange={(e) => setSearchField(e.target.value)}
-            className="border border-slate-300 px-4 py-2 bg-white text-sm"
+      <div className="mb-8 flex flex-wrap gap-3">
+        {[
+          ["notice", "공지사항"],
+          ["history", "연구소 연혁"],
+          ["conference", "학술대회 개최 현황"],
+          ["performance", "연구소 수행 현황"],
+        ].map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => {
+              setActiveTab(key);
+              setIsWriting(false);
+            }}
+            className={`px-5 py-3 text-sm font-bold border ${
+              activeTab === key
+                ? "bg-[#6f0f14] text-white border-[#6f0f14]"
+                : "bg-white text-slate-700 border-slate-300"
+            }`}
           >
-            <option value="title">제목</option>
-            <option value="all">제목+파일명</option>
-          </select>
-
-          <input
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            placeholder="검색어를 입력하세요"
-            className="w-64 border border-slate-300 px-4 py-2 text-sm"
-          />
-
-          <button className="bg-[#97b12c] px-5 py-2 text-sm font-bold text-white">
-            검색
+            {label}
           </button>
-        </div>
+        ))}
       </div>
 
       {session && !isWriting && (
-        <div className="mt-6 flex justify-end">
+        <div className="mb-6 flex justify-end">
           <button
             onClick={() => setIsWriting(true)}
             className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
           >
-            글쓰기
+            데이터 추가
           </button>
         </div>
       )}
 
-      {session && isWriting && (
-        <div className="mt-6 bg-white border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm font-medium text-[#8c6b2f] mb-4">자료 등록</p>
+      {session && isWriting && activeTab === "notice" && (
+        <div className="bg-white border border-slate-200 p-6 shadow-sm mb-8">
+          <p className="text-sm font-medium text-[#8c6b2f] mb-4">공지사항 등록</p>
 
           <div className="grid gap-4">
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
-                checked={form.is_notice}
-                onChange={(e) => setForm((prev) => ({ ...prev, is_notice: e.target.checked }))}
+                checked={noticeForm.isNotice}
+                onChange={(e) =>
+                  setNoticeForm((prev) => ({ ...prev, isNotice: e.target.checked }))
+                }
               />
-              공지로 등록
+              공지로 상단 고정
             </label>
 
+            <select
+              value={noticeForm.category}
+              onChange={(e) =>
+                setNoticeForm((prev) => ({ ...prev, category: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+            >
+              <option value="일반">일반</option>
+              <option value="공지">공지</option>
+              <option value="학술행사">학술행사</option>
+              <option value="연구성과">연구성과</option>
+              <option value="세미나">세미나</option>
+            </select>
+
             <input
-              value={form.title}
-              onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
+              value={noticeForm.title}
+              onChange={(e) =>
+                setNoticeForm((prev) => ({ ...prev, title: e.target.value }))
+              }
               className="border border-slate-300 px-4 py-3 outline-none"
               placeholder="제목"
             />
 
-            <input
-              type="file"
-              accept=".pdf,.hwp,.hwpx,.doc,.docx,.png,.jpg,.jpeg,.webp"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="block w-full border border-slate-300 px-4 py-3 bg-white"
+            <textarea
+              value={noticeForm.content}
+              onChange={(e) =>
+                setNoticeForm((prev) => ({ ...prev, content: e.target.value }))
+              }
+              className="min-h-[180px] border border-slate-300 px-4 py-3 outline-none"
+              placeholder="내용"
             />
-
-            {file && <p className="text-sm text-slate-600">선택된 파일: {file.name}</p>}
 
             <div className="flex gap-3">
               <button
-                onClick={upload}
-                disabled={uploading}
-                className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white disabled:opacity-60"
+                onClick={addNoticePost}
+                className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
               >
-                {uploading ? "등록 중..." : "등록"}
+                등록
               </button>
-
               <button
-                onClick={() => {
-                  setIsWriting(false);
-                  setFile(null);
-                  setForm({ title: "", is_notice: false });
-                }}
+                onClick={() => setIsWriting(false)}
                 className="border border-slate-300 px-6 py-3 text-sm font-bold text-slate-700"
               >
                 취소
@@ -800,70 +873,336 @@ function Archive({ session }) {
         </div>
       )}
 
-      <div className="mt-8 overflow-hidden border-t border-slate-300">
-        <div className="grid grid-cols-[80px_1fr_60px_90px_110px_80px] border-b border-slate-300 bg-[#fafafa] px-4 py-4 text-sm font-medium text-slate-700">
-          <span>번호</span>
-          <span>제목</span>
-          <span className="text-center">파일</span>
-          <span className="text-center">작성자</span>
-          <span className="text-center">작성일</span>
-          <span className="text-center">조회수</span>
-        </div>
-
-        {loading ? (
-          <div className="px-4 py-10 text-slate-500">불러오는 중...</div>
-        ) : filteredPapers.length === 0 ? (
-          <div className="px-4 py-10 text-slate-500">등록된 자료가 없습니다.</div>
-        ) : (
-          filteredPapers.map((paper, index) => (
-            <div
-              key={paper.id}
-              className="grid grid-cols-[80px_1fr_60px_90px_110px_80px] items-center border-b border-slate-200 px-4 py-4 text-sm"
-            >
-              <div>
-                {paper.is_notice ? (
-                  <span className="inline-block bg-[#97b12c] px-3 py-1 text-white text-xs font-bold">
-                    공지
-                  </span>
-                ) : (
-                  <span>{filteredPapers.length - index}</span>
-                )}
-              </div>
-
-              <button onClick={() => openFile(paper)} className="text-left text-slate-800 hover:underline">
-                {paper.title}
+      {session && isWriting && activeTab === "history" && (
+        <div className="bg-white border border-slate-200 p-6 shadow-sm mb-8">
+          <p className="text-sm font-medium text-[#8c6b2f] mb-4">연구소 연혁 추가</p>
+          <div className="grid gap-4">
+            <input
+              value={historyForm.ym}
+              onChange={(e) => setHistoryForm((prev) => ({ ...prev, ym: e.target.value }))}
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="연월 (예: 2026-03)"
+            />
+            <textarea
+              value={historyForm.content}
+              onChange={(e) => setHistoryForm((prev) => ({ ...prev, content: e.target.value }))}
+              className="min-h-[140px] border border-slate-300 px-4 py-3 outline-none"
+              placeholder="연혁 내용"
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={addHistoryItem}
+                className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
+              >
+                등록
               </button>
+              <button
+                onClick={() => setIsWriting(false)}
+                className="border border-slate-300 px-6 py-3 text-sm font-bold text-slate-700"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-              <div className="text-center">
-                <button
-                  onClick={() => openFile(paper)}
-                  className="text-slate-500 hover:text-[#6f0f14]"
-                  title="파일 열기"
+      {session && isWriting && activeTab === "conference" && (
+        <div className="bg-white border border-slate-200 p-6 shadow-sm mb-8">
+          <p className="text-sm font-medium text-[#8c6b2f] mb-4">학술대회 개최 현황 추가</p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <input
+              value={conferenceForm.title}
+              onChange={(e) => setConferenceForm((prev) => ({ ...prev, title: e.target.value }))}
+              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+              placeholder="학술대회명"
+            />
+            <input
+              value={conferenceForm.period}
+              onChange={(e) => setConferenceForm((prev) => ({ ...prev, period: e.target.value }))}
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="개최일 또는 기간"
+            />
+            <input
+              value={conferenceForm.place}
+              onChange={(e) => setConferenceForm((prev) => ({ ...prev, place: e.target.value }))}
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="개최 장소"
+            />
+            <input
+              value={conferenceForm.papers}
+              onChange={(e) => setConferenceForm((prev) => ({ ...prev, papers: e.target.value }))}
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="발표 논문 수"
+            />
+            <input
+              value={conferenceForm.presenters}
+              onChange={(e) =>
+                setConferenceForm((prev) => ({ ...prev, presenters: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="발표자 수"
+            />
+            <input
+              value={conferenceForm.cost}
+              onChange={(e) => setConferenceForm((prev) => ({ ...prev, cost: e.target.value }))}
+              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+              placeholder="개최 비용"
+            />
+          </div>
+          <div className="mt-4 flex gap-3">
+            <button
+              onClick={addConferenceItem}
+              className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
+            >
+              등록
+            </button>
+            <button
+              onClick={() => setIsWriting(false)}
+              className="border border-slate-300 px-6 py-3 text-sm font-bold text-slate-700"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
+
+      {session && isWriting && activeTab === "performance" && (
+        <div className="bg-white border border-slate-200 p-6 shadow-sm mb-8">
+          <p className="text-sm font-medium text-[#8c6b2f] mb-4">연구소 수행 현황 추가</p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <input
+              value={performanceForm.type}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, type: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="구분"
+            />
+            <input
+              value={performanceForm.manager}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, manager: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="책임자 성명"
+            />
+            <input
+              value={performanceForm.title}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, title: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+              placeholder="연구과제명"
+            />
+            <input
+              value={performanceForm.researchers}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, researchers: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="공동 연구원 수"
+            />
+            <input
+              value={performanceForm.period}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, period: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="연구기간"
+            />
+            <input
+              value={performanceForm.supportType}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, supportType: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="연구비 지원 구분"
+            />
+            <input
+              value={performanceForm.budget}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, budget: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none"
+              placeholder="연구비"
+            />
+            <input
+              value={performanceForm.agency}
+              onChange={(e) =>
+                setPerformanceForm((prev) => ({ ...prev, agency: e.target.value }))
+              }
+              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+              placeholder="연구비 지원 기관"
+            />
+          </div>
+          <div className="mt-4 flex gap-3">
+            <button
+              onClick={addPerformanceItem}
+              className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
+            >
+              등록
+            </button>
+            <button
+              onClick={() => setIsWriting(false)}
+              className="border border-slate-300 px-6 py-3 text-sm font-bold text-slate-700"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "notice" && (
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+          <div>
+            <div className="overflow-hidden bg-white border border-slate-200 shadow-sm">
+              <div className="grid grid-cols-[110px_1fr_110px_90px] border-b border-slate-200 bg-[#f9f4ec] px-6 py-4 text-sm font-medium text-slate-500">
+                <span>분류</span>
+                <span>제목</span>
+                <span>날짜</span>
+                <span>관리</span>
+              </div>
+
+              {sortedNoticePosts.map((item) => (
+                <div
+                  key={item.id}
+                  className="grid grid-cols-[110px_1fr_110px_90px] items-center border-b border-slate-100 px-6 py-5 text-sm last:border-b-0"
                 >
-                  📎
-                </button>
-              </div>
+                  <span className="text-slate-500">
+                    {item.isNotice ? "공지" : item.category}
+                  </span>
 
-              <div className="text-center text-slate-700">{paper.author_name || "관리자"}</div>
-              <div className="text-center text-slate-700">
-                {paper.created_at ? new Date(paper.created_at).toLocaleDateString("ko-KR") : "-"}
-              </div>
-              <div className="text-center text-slate-700">{paper.view_count || 0}</div>
-
-              {session && (
-                <div className="col-span-6 mt-2 flex justify-end">
                   <button
-                    onClick={() => deletePaper(paper)}
-                    className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                    type="button"
+                    onClick={() => setSelectedPost(item)}
+                    className="text-left font-medium text-slate-800 hover:text-[#6f0f14] hover:underline"
                   >
-                    삭제
+                    {item.title}
                   </button>
+
+                  <span className="text-slate-500">{item.date}</span>
+
+                  {session ? (
+                    <button
+                      type="button"
+                      onClick={() => deleteNoticePost(item.id)}
+                      className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                    >
+                      삭제
+                    </button>
+                  ) : (
+                    <span className="text-xs text-slate-400">-</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="bg-white border border-slate-200 p-8 shadow-sm">
+              <h3 className="text-2xl font-bold text-[#6f0f14] mb-6">게시글 상세</h3>
+
+              {selectedPost ? (
+                <>
+                  <div className="flex items-center gap-3">
+                    <span className="bg-[#f9f4ec] px-3 py-1 text-xs font-medium text-[#6f0f14]">
+                      {selectedPost.isNotice ? "공지" : selectedPost.category}
+                    </span>
+                    <span className="text-sm text-slate-500">{selectedPost.date}</span>
+                  </div>
+
+                  <h4 className="mt-4 text-2xl font-bold text-slate-800">
+                    {selectedPost.title}
+                  </h4>
+
+                  <div className="mt-6 bg-[#f9f4ec] p-6 text-base leading-8 text-slate-700 whitespace-pre-wrap">
+                    {selectedPost.content}
+                  </div>
+                </>
+              ) : (
+                <div className="text-slate-500">
+                  왼쪽 목록에서 게시글 제목을 클릭하면 상세 내용이 표시됩니다.
                 </div>
               )}
             </div>
-          ))
-        )}
-      </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "history" && (
+        <div className="bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-[140px_1fr] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+            <span>연월</span>
+            <span>연혁</span>
+          </div>
+          {historyItems.map((item) => (
+            <div
+              key={item.id}
+              className="grid grid-cols-[140px_1fr] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+            >
+              <span className="text-slate-600">{item.ym}</span>
+              <span className="text-slate-800">{item.content}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {activeTab === "conference" && (
+        <div className="bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-[1.6fr_160px_180px_100px_100px_120px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+            <span>학술대회명</span>
+            <span>개최일</span>
+            <span>장소</span>
+            <span>논문 수</span>
+            <span>발표자 수</span>
+            <span>비용</span>
+          </div>
+          {conferenceItems.map((item) => (
+            <div
+              key={item.id}
+              className="grid grid-cols-[1.6fr_160px_180px_100px_100px_120px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+            >
+              <span className="text-slate-800">{item.title}</span>
+              <span className="text-slate-600">{item.period}</span>
+              <span className="text-slate-600">{item.place}</span>
+              <span className="text-slate-600">{item.papers}</span>
+              <span className="text-slate-600">{item.presenters}</span>
+              <span className="text-slate-600">{item.cost}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {activeTab === "performance" && (
+        <div className="bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_160px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+            <span>구분</span>
+            <span>연구과제명</span>
+            <span>책임자</span>
+            <span>연구원 수</span>
+            <span>연구기간</span>
+            <span>지원구분</span>
+            <span>연구비</span>
+            <span>지원기관</span>
+          </div>
+          {performanceItems.map((item) => (
+            <div
+              key={item.id}
+              className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_160px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+            >
+              <span className="text-slate-600">{item.type}</span>
+              <span className="text-slate-800">{item.title}</span>
+              <span className="text-slate-600">{item.manager}</span>
+              <span className="text-slate-600">{item.researchers}</span>
+              <span className="text-slate-600">{item.period}</span>
+              <span className="text-slate-600">{item.supportType}</span>
+              <span className="text-slate-600">{item.budget}</span>
+              <span className="text-slate-600">{item.agency}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
