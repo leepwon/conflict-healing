@@ -52,8 +52,7 @@ function getFileExt(name = "") {
 }
 
 function isImageFile(name = "") {
-  const ext = getFileExt(name);
-  return ["png", "jpg", "jpeg", "webp", "gif"].includes(ext);
+  return ["png", "jpg", "jpeg", "webp", "gif"].includes(getFileExt(name));
 }
 
 function isPdfFile(name = "") {
@@ -107,6 +106,16 @@ const defaultHistory = [
     content: "방폐장 유치에 따른 경주지역 경제유발 효과와 지역협력 증대방안 연구용역",
   },
   { id: "h7", ym: "2013-03", content: "경주시 힐링시티 조성을 위한 전문가 워크숍" },
+  { id: "h8", ym: "2013-05", content: "'사용후핵연료' 공론화에 대비한 전문가 워크숍" },
+  { id: "h9", ym: "2013-06", content: "정책자료집 발간 : 사용후핵연료 공론화와 사회갈등" },
+  {
+    id: "h10",
+    ym: "2013-08",
+    content:
+      "갈등치유연구소 부설 경관치유센터 설치 / 한국갈등관리학회와 MOU 협약식 및 공동학술세미나 개최",
+  },
+  { id: "h11", ym: "2013-09", content: "제2기 갈등관리 아카데미 위탁교육 용역" },
+  { id: "h12", ym: "2013-12", content: "영남지역 대학생 공공갈등관리 논문공모전 시상식" },
 ];
 
 const defaultConferences = [
@@ -547,29 +556,26 @@ function RegulationsPage() {
 ========================= */
 
 function Board({ session }) {
-  const NOTICE_KEY = "dongguk-board-posts-v5";
-  const HISTORY_KEY = "dongguk-history-v5";
-  const CONF_KEY = "dongguk-conference-v5";
-  const PERF_KEY = "dongguk-performance-v5";
+  const NOTICE_KEY = "dongguk-board-posts-v6";
+  const HISTORY_KEY = "dongguk-history-v6";
+  const CONF_KEY = "dongguk-conference-v6";
+  const PERF_KEY = "dongguk-performance-v6";
 
   const [activeTab, setActiveTab] = useState("notice");
-  const [mode, setMode] = useState("list"); // list | create | edit
+  const [mode, setMode] = useState("list");
 
   const [noticePosts, setNoticePosts] = useState(() => {
     const saved = localStorage.getItem(NOTICE_KEY);
     return saved ? JSON.parse(saved) : defaultNoticePosts;
   });
-
   const [historyItems, setHistoryItems] = useState(() => {
     const saved = localStorage.getItem(HISTORY_KEY);
     return saved ? JSON.parse(saved) : defaultHistory;
   });
-
   const [conferenceItems, setConferenceItems] = useState(() => {
     const saved = localStorage.getItem(CONF_KEY);
     return saved ? JSON.parse(saved) : defaultConferences;
   });
-
   const [performanceItems, setPerformanceItems] = useState(() => {
     const saved = localStorage.getItem(PERF_KEY);
     return saved ? JSON.parse(saved) : defaultPerformances;
@@ -679,6 +685,11 @@ function Board({ session }) {
     setMode("create");
   };
 
+  const cancelEdit = () => {
+    resetForms();
+    setMode("list");
+  };
+
   const openEditNotice = (item) => {
     if (!session) return;
     setNoticeForm({
@@ -703,19 +714,32 @@ function Board({ session }) {
 
   const openEditConference = (item) => {
     if (!session) return;
-    setConferenceForm({ ...item });
+    setConferenceForm({
+      id: item.id,
+      title: item.title,
+      period: item.period,
+      place: item.place,
+      papers: item.papers,
+      presenters: item.presenters,
+      cost: item.cost,
+    });
     setMode("edit");
   };
 
   const openEditPerformance = (item) => {
     if (!session) return;
-    setPerformanceForm({ ...item });
+    setPerformanceForm({
+      id: item.id,
+      type: item.type,
+      title: item.title,
+      manager: item.manager,
+      researchers: item.researchers,
+      period: item.period,
+      supportType: item.supportType,
+      budget: item.budget,
+      agency: item.agency,
+    });
     setMode("edit");
-  };
-
-  const cancelEdit = () => {
-    resetForms();
-    setMode("list");
   };
 
   const saveNotice = () => {
@@ -1343,7 +1367,7 @@ function ArchiveList({ session }) {
 
   const [papers, setPapers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState("list"); // list | create | edit
+  const [mode, setMode] = useState("list");
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [editId, setEditId] = useState(null);
@@ -1716,7 +1740,7 @@ function ArchiveList({ session }) {
   );
 }
 
-function ArchiveDetail({ session }) {
+function ArchiveDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -1747,6 +1771,11 @@ function ArchiveDetail({ session }) {
     loadPaper();
   }, [id]);
 
+  const previewUrl = useMemo(() => {
+    if (!paper || !supabase) return "";
+    return supabase.storage.from("papers").getPublicUrl(paper.file_path).data.publicUrl;
+  }, [paper]);
+
   const handleDownload = async () => {
     if (!paper || !supabase) return;
 
@@ -1762,11 +1791,6 @@ function ArchiveDetail({ session }) {
       prev ? { ...prev, view_count: (prev.view_count || 0) + 1 } : prev
     );
   };
-
-  const previewUrl = useMemo(() => {
-    if (!paper || !supabase) return "";
-    return supabase.storage.from("papers").getPublicUrl(paper.file_path).data.publicUrl;
-  }, [paper]);
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-24">
@@ -1863,16 +1887,10 @@ function ArchiveDetail({ session }) {
                 <div className="text-slate-600 leading-7">
                   이 파일 형식은 브라우저 내 미리보기를 지원하지 않습니다.
                   <br />
-                  아래 다운로드 버튼을 눌러 파일을 확인해 주세요.
+                  다운로드 버튼을 눌러 파일을 확인해 주세요.
                 </div>
               )}
             </div>
-
-            {session && (
-              <div className="mt-6 text-sm text-slate-500">
-                자료 수정은 자료실 목록 페이지의 <span className="font-semibold">수정</span> 버튼에서 할 수 있습니다.
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -2033,7 +2051,7 @@ export default function App() {
             <Route path="/regulations" element={<RegulationsPage />} />
             <Route path="/board" element={<Board session={session} />} />
             <Route path="/archive" element={<ArchiveList session={session} />} />
-            <Route path="/archive/:id" element={<ArchiveDetail session={session} />} />
+            <Route path="/archive/:id" element={<ArchiveDetail />} />
             <Route path="/admin" element={<Admin session={session} />} />
           </Routes>
         </div>
