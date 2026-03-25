@@ -23,13 +23,6 @@ function formatDate(dateValue) {
   ).padStart(2, "0")}`;
 }
 
-function todayString() {
-  const now = new Date();
-  return `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(
-    now.getDate()
-  ).padStart(2, "0")}`;
-}
-
 function makeSafeFileName(name) {
   const lastDot = name.lastIndexOf(".");
   const base = lastDot >= 0 ? name.slice(0, lastDot) : name;
@@ -58,131 +51,6 @@ function isImageFile(name = "") {
 function isPdfFile(name = "") {
   return getFileExt(name) === "pdf";
 }
-
-/* =========================
-   기본 데이터
-========================= */
-
-const defaultNoticePosts = [
-  {
-    id: 1,
-    category: "공지",
-    title: "갈등치유연구소 홈페이지 시범 운영 안내",
-    content:
-      "동국대학교 WISE캠퍼스 갈등치유연구소 홈페이지가 시범 운영 중입니다. 게시판, 자료실, 연구소 정보 메뉴를 순차적으로 정비하고 있습니다.",
-    date: "2026.03.16",
-    isNotice: true,
-  },
-  {
-    id: 2,
-    category: "학술행사",
-    title: "갈등치유 국제학술대회 발표자 모집",
-    content:
-      "학술대회 발표를 희망하시는 연구자께서는 발표 초록과 간단한 이력을 제출해 주시기 바랍니다.",
-    date: "2026.03.15",
-    isNotice: false,
-  },
-];
-
-const defaultHistory = [
-  { id: "h1", ym: "2011-09", content: "갈등치유연구소 설립" },
-  {
-    id: "h2",
-    ym: "2011-12",
-    content:
-      "갈등치유연구소 부설 사회갈등치유연구센터, 관계치유연구소, 마음 뇌 연구센터, 심신의학연구소, 철학치유연구소 설치",
-  },
-  { id: "h3", ym: "2012-01", content: "갈등치유연구소 부설 센터 운영 규정 제정" },
-  { id: "h4", ym: "2012-06", content: "총서 개발 : 갈등치유론(한국학술정보)" },
-  {
-    id: "h5",
-    ym: "2012-08",
-    content:
-      "갈등치유연구소 네이버 카페 개발 및 운영 / 방폐물 지역수용성 문제와 환경안전을 위한 연구용역",
-  },
-  {
-    id: "h6",
-    ym: "2012-10",
-    content: "방폐장 유치에 따른 경주지역 경제유발 효과와 지역협력 증대방안 연구용역",
-  },
-  { id: "h7", ym: "2013-03", content: "경주시 힐링시티 조성을 위한 전문가 워크숍" },
-  { id: "h8", ym: "2013-05", content: "'사용후핵연료' 공론화에 대비한 전문가 워크숍" },
-  { id: "h9", ym: "2013-06", content: "정책자료집 발간 : 사용후핵연료 공론화와 사회갈등" },
-  {
-    id: "h10",
-    ym: "2013-08",
-    content:
-      "갈등치유연구소 부설 경관치유센터 설치 / 한국갈등관리학회와 MOU 협약식 및 공동학술세미나 개최",
-  },
-  { id: "h11", ym: "2013-09", content: "제2기 갈등관리 아카데미 위탁교육 용역" },
-  { id: "h12", ym: "2013-12", content: "영남지역 대학생 공공갈등관리 논문공모전 시상식" },
-];
-
-const defaultConferences = [
-  {
-    id: "c1",
-    title: "갈등치유연구소 콜로키움-인도종교에서의 갈등의 딜레마",
-    period: "2024-12-19",
-    place: "ZOOM 온라인",
-    papers: "1편",
-    presenters: "1명",
-    cost: "0천원",
-  },
-  {
-    id: "c2",
-    title: "갈등치유연구소 콜로키움-헤겔철학에서 불행한 의식과 소외의 갈등",
-    period: "2024-10-31",
-    place: "ZOOM 온라인",
-    papers: "1편",
-    presenters: "1명",
-    cost: "0천원",
-  },
-  {
-    id: "c3",
-    title: "갈등치유연구소-타이치학회 2024년도 하계 공동학술대회",
-    period: "2024-08-31",
-    place: "밝은빛 태극권 4층",
-    papers: "3편",
-    presenters: "4명",
-    cost: "0천원",
-  },
-];
-
-const defaultPerformances = [
-  {
-    id: "p1",
-    type: "단독연구",
-    title: "원전에 대한 주민 경험인식(heuristic cognition) 구성요소와 형성과정",
-    manager: "오영석",
-    researchers: "5명",
-    period: "2016-11-01 ~ 2017-06-30",
-    supportType: "기타",
-    budget: "77,000천원",
-    agency: "경희대학교산학협력단",
-  },
-  {
-    id: "p2",
-    type: "단독연구",
-    title: "발전소 인근지역 주민 집단이주제도의 타당성 고찰 및 합리적 제도개선 방안 연구",
-    manager: "오영석",
-    researchers: "6명",
-    period: "2015-08-01 ~ 2016-01-31",
-    supportType: "중앙정부",
-    budget: "67,500천원",
-    agency: "산업통상자원부",
-  },
-  {
-    id: "p3",
-    type: "산학협동",
-    title: "사용후핵연료 관리방안에 대한 원전지역 의견수렴 지원용역",
-    manager: "오영석",
-    researchers: "8명",
-    period: "2014-12-17 ~ 2015-06-16",
-    supportType: "기타",
-    budget: "533,635천원",
-    agency: "한국원자력환경공단",
-  },
-];
 
 /* =========================
    공통 UI
@@ -270,12 +138,18 @@ function Navbar({ session, onLogout }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-300">
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        <div>
-          <p className="text-xs tracking-[0.12em] text-[#8c6b2f]">DONGGUK UNIVERSITY WISE CAMPUS</p>
+        <button
+          type="button"
+          onClick={() => moveTo("/")}
+          className="text-left"
+        >
+          <p className="text-xs tracking-[0.12em] text-[#8c6b2f]">
+            DONGGUK UNIVERSITY WISE CAMPUS
+          </p>
           <h1 className="text-[18px] leading-none font-bold text-[#7a1318] mt-2">
             갈등치유연구소
           </h1>
-        </div>
+        </button>
 
         <nav className="flex items-center gap-8 text-[16px] font-bold text-slate-900">
           <div className="relative flex items-center gap-1" ref={menuRef}>
@@ -552,34 +426,18 @@ function RegulationsPage() {
 }
 
 /* =========================
-   Board
+   Board (Supabase DB)
 ========================= */
 
 function Board({ session }) {
-  const NOTICE_KEY = "dongguk-board-posts-v6";
-  const HISTORY_KEY = "dongguk-history-v6";
-  const CONF_KEY = "dongguk-conference-v6";
-  const PERF_KEY = "dongguk-performance-v6";
-
   const [activeTab, setActiveTab] = useState("notice");
   const [mode, setMode] = useState("list");
+  const [loading, setLoading] = useState(true);
 
-  const [noticePosts, setNoticePosts] = useState(() => {
-    const saved = localStorage.getItem(NOTICE_KEY);
-    return saved ? JSON.parse(saved) : defaultNoticePosts;
-  });
-  const [historyItems, setHistoryItems] = useState(() => {
-    const saved = localStorage.getItem(HISTORY_KEY);
-    return saved ? JSON.parse(saved) : defaultHistory;
-  });
-  const [conferenceItems, setConferenceItems] = useState(() => {
-    const saved = localStorage.getItem(CONF_KEY);
-    return saved ? JSON.parse(saved) : defaultConferences;
-  });
-  const [performanceItems, setPerformanceItems] = useState(() => {
-    const saved = localStorage.getItem(PERF_KEY);
-    return saved ? JSON.parse(saved) : defaultPerformances;
-  });
+  const [noticePosts, setNoticePosts] = useState([]);
+  const [historyItems, setHistoryItems] = useState([]);
+  const [conferenceItems, setConferenceItems] = useState([]);
+  const [performanceItems, setPerformanceItems] = useState([]);
 
   const [selectedPost, setSelectedPost] = useState(null);
 
@@ -619,26 +477,53 @@ function Board({ session }) {
     agency: "",
   });
 
-  useEffect(() => {
-    localStorage.setItem(NOTICE_KEY, JSON.stringify(noticePosts));
-  }, [noticePosts]);
+  const loadBoardData = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    const [
+      noticesRes,
+      historyRes,
+      confRes,
+      perfRes,
+    ] = await Promise.all([
+      supabase
+        .from("board_notices")
+        .select("*")
+        .order("is_notice", { ascending: false })
+        .order("id", { ascending: false }),
+      supabase.from("institute_history").select("*").order("id", { ascending: false }),
+      supabase.from("institute_conferences").select("*").order("id", { ascending: false }),
+      supabase.from("institute_performances").select("*").order("id", { ascending: false }),
+    ]);
+
+    if (!noticesRes.error) setNoticePosts(noticesRes.data || []);
+    if (!historyRes.error) setHistoryItems(historyRes.data || []);
+    if (!confRes.error) setConferenceItems(confRes.data || []);
+    if (!perfRes.error) {
+      setPerformanceItems(
+        (perfRes.data || []).map((item) => ({
+          ...item,
+          supportType: item.support_type || "",
+        }))
+      );
+    }
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(historyItems));
-  }, [historyItems]);
-
-  useEffect(() => {
-    localStorage.setItem(CONF_KEY, JSON.stringify(conferenceItems));
-  }, [conferenceItems]);
-
-  useEffect(() => {
-    localStorage.setItem(PERF_KEY, JSON.stringify(performanceItems));
-  }, [performanceItems]);
+    loadBoardData();
+  }, []);
 
   const sortedNoticePosts = useMemo(() => {
     return [...noticePosts].sort((a, b) => {
-      if ((a.isNotice ? 1 : 0) !== (b.isNotice ? 1 : 0)) {
-        return (b.isNotice ? 1 : 0) - (a.isNotice ? 1 : 0);
+      if ((a.is_notice ? 1 : 0) !== (b.is_notice ? 1 : 0)) {
+        return (b.is_notice ? 1 : 0) - (a.is_notice ? 1 : 0);
       }
       return b.id - a.id;
     });
@@ -694,10 +579,10 @@ function Board({ session }) {
     if (!session) return;
     setNoticeForm({
       id: item.id,
-      category: item.category,
-      title: item.title,
-      content: item.content,
-      isNotice: item.isNotice,
+      category: item.category || "일반",
+      title: item.title || "",
+      content: item.content || "",
+      isNotice: !!item.is_notice,
     });
     setMode("edit");
   };
@@ -706,8 +591,8 @@ function Board({ session }) {
     if (!session) return;
     setHistoryForm({
       id: item.id,
-      ym: item.ym,
-      content: item.content,
+      ym: item.ym || "",
+      content: item.content || "",
     });
     setMode("edit");
   };
@@ -716,12 +601,12 @@ function Board({ session }) {
     if (!session) return;
     setConferenceForm({
       id: item.id,
-      title: item.title,
-      period: item.period,
-      place: item.place,
-      papers: item.papers,
-      presenters: item.presenters,
-      cost: item.cost,
+      title: item.title || "",
+      period: item.period || "",
+      place: item.place || "",
+      papers: item.papers || "",
+      presenters: item.presenters || "",
+      cost: item.cost || "",
     });
     setMode("edit");
   };
@@ -730,140 +615,220 @@ function Board({ session }) {
     if (!session) return;
     setPerformanceForm({
       id: item.id,
-      type: item.type,
-      title: item.title,
-      manager: item.manager,
-      researchers: item.researchers,
-      period: item.period,
-      supportType: item.supportType,
-      budget: item.budget,
-      agency: item.agency,
+      type: item.type || "",
+      title: item.title || "",
+      manager: item.manager || "",
+      researchers: item.researchers || "",
+      period: item.period || "",
+      supportType: item.supportType || item.support_type || "",
+      budget: item.budget || "",
+      agency: item.agency || "",
     });
     setMode("edit");
   };
 
-  const saveNotice = () => {
+  const saveNotice = async () => {
+    if (!supabase) return;
     if (!noticeForm.title.trim() || !noticeForm.content.trim()) {
       alert("제목과 내용을 입력해 주세요.");
       return;
     }
 
     if (mode === "edit" && noticeForm.id) {
-      setNoticePosts((prev) =>
-        prev.map((item) =>
-          item.id === noticeForm.id
-            ? {
-                ...item,
-                category: noticeForm.category,
-                title: noticeForm.title.trim(),
-                content: noticeForm.content.trim(),
-                isNotice: noticeForm.isNotice,
-              }
-            : item
-        )
-      );
+      const { error } = await supabase
+        .from("board_notices")
+        .update({
+          category: noticeForm.category,
+          title: noticeForm.title.trim(),
+          content: noticeForm.content.trim(),
+          is_notice: noticeForm.isNotice,
+        })
+        .eq("id", noticeForm.id);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
     } else {
-      const newItem = {
-        id: Date.now(),
+      const { error } = await supabase.from("board_notices").insert({
         category: noticeForm.category,
         title: noticeForm.title.trim(),
         content: noticeForm.content.trim(),
-        date: todayString(),
-        isNotice: noticeForm.isNotice,
-      };
-      setNoticePosts((prev) => [...prev, newItem]);
-      setSelectedPost(newItem);
+        is_notice: noticeForm.isNotice,
+      });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
     }
 
     cancelEdit();
+    await loadBoardData();
   };
 
-  const deleteNotice = (id) => {
-    if (!session) return;
+  const deleteNotice = async (id) => {
+    if (!session || !supabase) return;
     if (!confirm("이 글을 삭제하시겠습니까?")) return;
-    const next = noticePosts.filter((item) => item.id !== id);
-    setNoticePosts(next);
-    if (selectedPost?.id === id) {
-      setSelectedPost(next.length > 0 ? next[0] : null);
+
+    const { error } = await supabase.from("board_notices").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
     }
+
+    if (selectedPost?.id === id) setSelectedPost(null);
+    await loadBoardData();
   };
 
-  const saveHistory = () => {
+  const saveHistory = async () => {
+    if (!supabase) return;
     if (!historyForm.ym.trim() || !historyForm.content.trim()) {
       alert("연월과 내용을 입력해 주세요.");
       return;
     }
 
     if (mode === "edit" && historyForm.id) {
-      setHistoryItems((prev) =>
-        prev.map((item) =>
-          item.id === historyForm.id
-            ? { ...item, ym: historyForm.ym.trim(), content: historyForm.content.trim() }
-            : item
-        )
-      );
+      const { error } = await supabase
+        .from("institute_history")
+        .update({
+          ym: historyForm.ym.trim(),
+          content: historyForm.content.trim(),
+        })
+        .eq("id", historyForm.id);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
     } else {
-      const newItem = {
-        id: `hx-${Date.now()}`,
+      const { error } = await supabase.from("institute_history").insert({
         ym: historyForm.ym.trim(),
         content: historyForm.content.trim(),
-      };
-      setHistoryItems((prev) => [newItem, ...prev]);
+      });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
     }
 
     cancelEdit();
+    await loadBoardData();
   };
 
-  const deleteHistory = (id) => {
-    if (!session) return;
+  const deleteHistory = async (id) => {
+    if (!session || !supabase) return;
     if (!confirm("이 데이터를 삭제하시겠습니까?")) return;
-    setHistoryItems((prev) => prev.filter((item) => item.id !== id));
+
+    const { error } = await supabase.from("institute_history").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    await loadBoardData();
   };
 
-  const saveConference = () => {
+  const saveConference = async () => {
+    if (!supabase) return;
     if (!conferenceForm.title.trim() || !conferenceForm.period.trim()) {
       alert("학술대회명과 개최일을 입력해 주세요.");
       return;
     }
 
+    const payload = {
+      title: conferenceForm.title.trim(),
+      period: conferenceForm.period.trim(),
+      place: conferenceForm.place,
+      papers: conferenceForm.papers,
+      presenters: conferenceForm.presenters,
+      cost: conferenceForm.cost,
+    };
+
     if (mode === "edit" && conferenceForm.id) {
-      setConferenceItems((prev) =>
-        prev.map((item) => (item.id === conferenceForm.id ? { ...conferenceForm } : item))
-      );
+      const { error } = await supabase
+        .from("institute_conferences")
+        .update(payload)
+        .eq("id", conferenceForm.id);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
     } else {
-      setConferenceItems((prev) => [{ ...conferenceForm, id: `cx-${Date.now()}` }, ...prev]);
+      const { error } = await supabase.from("institute_conferences").insert(payload);
+      if (error) {
+        alert(error.message);
+        return;
+      }
     }
 
     cancelEdit();
+    await loadBoardData();
   };
 
-  const deleteConference = (id) => {
-    if (!session) return;
+  const deleteConference = async (id) => {
+    if (!session || !supabase) return;
     if (!confirm("이 데이터를 삭제하시겠습니까?")) return;
-    setConferenceItems((prev) => prev.filter((item) => item.id !== id));
+
+    const { error } = await supabase.from("institute_conferences").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    await loadBoardData();
   };
 
-  const savePerformance = () => {
+  const savePerformance = async () => {
+    if (!supabase) return;
     if (!performanceForm.title.trim() || !performanceForm.period.trim()) {
       alert("연구과제명과 연구기간을 입력해 주세요.");
       return;
     }
 
+    const payload = {
+      type: performanceForm.type,
+      title: performanceForm.title.trim(),
+      manager: performanceForm.manager,
+      researchers: performanceForm.researchers,
+      period: performanceForm.period.trim(),
+      support_type: performanceForm.supportType,
+      budget: performanceForm.budget,
+      agency: performanceForm.agency,
+    };
+
     if (mode === "edit" && performanceForm.id) {
-      setPerformanceItems((prev) =>
-        prev.map((item) => (item.id === performanceForm.id ? { ...performanceForm } : item))
-      );
+      const { error } = await supabase
+        .from("institute_performances")
+        .update(payload)
+        .eq("id", performanceForm.id);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
     } else {
-      setPerformanceItems((prev) => [{ ...performanceForm, id: `px-${Date.now()}` }, ...prev]);
+      const { error } = await supabase.from("institute_performances").insert(payload);
+      if (error) {
+        alert(error.message);
+        return;
+      }
     }
 
     cancelEdit();
+    await loadBoardData();
   };
 
-  const deletePerformance = (id) => {
-    if (!session) return;
+  const deletePerformance = async (id) => {
+    if (!session || !supabase) return;
     if (!confirm("이 데이터를 삭제하시겠습니까?")) return;
-    setPerformanceItems((prev) => prev.filter((item) => item.id !== id));
+
+    const { error } = await supabase.from("institute_performances").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    await loadBoardData();
   };
 
   return (
@@ -911,449 +876,461 @@ function Board({ session }) {
         ))}
       </div>
 
-      {session && mode !== "list" && activeTab === "notice" && (
-        <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm font-medium text-[#8c6b2f] mb-4">
-            {mode === "edit" ? "공지사항 수정" : "공지사항 등록"}
-          </p>
-
-          <div className="grid gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={noticeForm.isNotice}
-                onChange={(e) =>
-                  setNoticeForm((prev) => ({ ...prev, isNotice: e.target.checked }))
-                }
-              />
-              공지로 상단 고정
-            </label>
-
-            <select
-              value={noticeForm.category}
-              onChange={(e) =>
-                setNoticeForm((prev) => ({ ...prev, category: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-            >
-              <option value="일반">일반</option>
-              <option value="공지">공지</option>
-              <option value="학술행사">학술행사</option>
-              <option value="연구성과">연구성과</option>
-              <option value="세미나">세미나</option>
-            </select>
-
-            <input
-              value={noticeForm.title}
-              onChange={(e) =>
-                setNoticeForm((prev) => ({ ...prev, title: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="제목"
-            />
-
-            <textarea
-              value={noticeForm.content}
-              onChange={(e) =>
-                setNoticeForm((prev) => ({ ...prev, content: e.target.value }))
-              }
-              className="min-h-[180px] border border-slate-300 px-4 py-3 outline-none"
-              placeholder="내용"
-            />
-
-            <FormActions onSave={saveNotice} onCancel={cancelEdit} />
-          </div>
+      {loading ? (
+        <div className="mt-8 bg-white border border-slate-200 p-12 text-slate-500">
+          불러오는 중...
         </div>
-      )}
+      ) : (
+        <>
+          {session && mode !== "list" && activeTab === "notice" && (
+            <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
+              <p className="text-sm font-medium text-[#8c6b2f] mb-4">
+                {mode === "edit" ? "공지사항 수정" : "공지사항 등록"}
+              </p>
 
-      {session && mode !== "list" && activeTab === "history" && (
-        <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm font-medium text-[#8c6b2f] mb-4">
-            {mode === "edit" ? "연혁 수정" : "연혁 추가"}
-          </p>
-          <div className="grid gap-4">
-            <input
-              value={historyForm.ym}
-              onChange={(e) => setHistoryForm((prev) => ({ ...prev, ym: e.target.value }))}
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="연월 (예: 2026-03)"
-            />
-            <textarea
-              value={historyForm.content}
-              onChange={(e) =>
-                setHistoryForm((prev) => ({ ...prev, content: e.target.value }))
-              }
-              className="min-h-[150px] border border-slate-300 px-4 py-3 outline-none"
-              placeholder="연혁 내용"
-            />
-            <FormActions onSave={saveHistory} onCancel={cancelEdit} />
-          </div>
-        </div>
-      )}
+              <div className="grid gap-4">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={noticeForm.isNotice}
+                    onChange={(e) =>
+                      setNoticeForm((prev) => ({ ...prev, isNotice: e.target.checked }))
+                    }
+                  />
+                  공지로 상단 고정
+                </label>
 
-      {session && mode !== "list" && activeTab === "conference" && (
-        <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm font-medium text-[#8c6b2f] mb-4">
-            {mode === "edit" ? "학술대회 현황 수정" : "학술대회 현황 추가"}
-          </p>
+                <select
+                  value={noticeForm.category}
+                  onChange={(e) =>
+                    setNoticeForm((prev) => ({ ...prev, category: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                >
+                  <option value="일반">일반</option>
+                  <option value="공지">공지</option>
+                  <option value="학술행사">학술행사</option>
+                  <option value="연구성과">연구성과</option>
+                  <option value="세미나">세미나</option>
+                </select>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <input
-              value={conferenceForm.title}
-              onChange={(e) =>
-                setConferenceForm((prev) => ({ ...prev, title: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
-              placeholder="학술대회명"
-            />
-            <input
-              value={conferenceForm.period}
-              onChange={(e) =>
-                setConferenceForm((prev) => ({ ...prev, period: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="개최일 또는 기간"
-            />
-            <input
-              value={conferenceForm.place}
-              onChange={(e) =>
-                setConferenceForm((prev) => ({ ...prev, place: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="장소"
-            />
-            <input
-              value={conferenceForm.papers}
-              onChange={(e) =>
-                setConferenceForm((prev) => ({ ...prev, papers: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="논문 수"
-            />
-            <input
-              value={conferenceForm.presenters}
-              onChange={(e) =>
-                setConferenceForm((prev) => ({ ...prev, presenters: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="발표자 수"
-            />
-            <input
-              value={conferenceForm.cost}
-              onChange={(e) =>
-                setConferenceForm((prev) => ({ ...prev, cost: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
-              placeholder="개최 비용"
-            />
-          </div>
+                <input
+                  value={noticeForm.title}
+                  onChange={(e) =>
+                    setNoticeForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="제목"
+                />
 
-          <FormActions onSave={saveConference} onCancel={cancelEdit} />
-        </div>
-      )}
+                <textarea
+                  value={noticeForm.content}
+                  onChange={(e) =>
+                    setNoticeForm((prev) => ({ ...prev, content: e.target.value }))
+                  }
+                  className="min-h-[180px] border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="내용"
+                />
 
-      {session && mode !== "list" && activeTab === "performance" && (
-        <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm font-medium text-[#8c6b2f] mb-4">
-            {mode === "edit" ? "연구소 수행 현황 수정" : "연구소 수행 현황 추가"}
-          </p>
+                <FormActions onSave={saveNotice} onCancel={cancelEdit} />
+              </div>
+            </div>
+          )}
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <input
-              value={performanceForm.type}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, type: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="구분"
-            />
-            <input
-              value={performanceForm.manager}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, manager: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="책임자"
-            />
-            <input
-              value={performanceForm.title}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, title: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
-              placeholder="연구과제명"
-            />
-            <input
-              value={performanceForm.researchers}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, researchers: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="연구원 수"
-            />
-            <input
-              value={performanceForm.period}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, period: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="연구기간"
-            />
-            <input
-              value={performanceForm.supportType}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, supportType: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="지원구분"
-            />
-            <input
-              value={performanceForm.budget}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, budget: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none"
-              placeholder="연구비"
-            />
-            <input
-              value={performanceForm.agency}
-              onChange={(e) =>
-                setPerformanceForm((prev) => ({ ...prev, agency: e.target.value }))
-              }
-              className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
-              placeholder="지원기관"
-            />
-          </div>
+          {session && mode !== "list" && activeTab === "history" && (
+            <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
+              <p className="text-sm font-medium text-[#8c6b2f] mb-4">
+                {mode === "edit" ? "연혁 수정" : "연혁 추가"}
+              </p>
+              <div className="grid gap-4">
+                <input
+                  value={historyForm.ym}
+                  onChange={(e) => setHistoryForm((prev) => ({ ...prev, ym: e.target.value }))}
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연월 (예: 2026-03)"
+                />
+                <textarea
+                  value={historyForm.content}
+                  onChange={(e) =>
+                    setHistoryForm((prev) => ({ ...prev, content: e.target.value }))
+                  }
+                  className="min-h-[150px] border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연혁 내용"
+                />
+                <FormActions onSave={saveHistory} onCancel={cancelEdit} />
+              </div>
+            </div>
+          )}
 
-          <FormActions onSave={savePerformance} onCancel={cancelEdit} />
-        </div>
-      )}
+          {session && mode !== "list" && activeTab === "conference" && (
+            <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
+              <p className="text-sm font-medium text-[#8c6b2f] mb-4">
+                {mode === "edit" ? "학술대회 현황 수정" : "학술대회 현황 추가"}
+              </p>
 
-      <div className="mt-8">
-        {activeTab === "notice" && (
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr]">
-            <div className="overflow-hidden bg-white border border-slate-200 shadow-sm">
-              <div className="grid grid-cols-[110px_1fr_110px_130px] border-b border-slate-200 bg-[#f9f4ec] px-6 py-4 text-sm font-medium text-slate-500">
-                <span>분류</span>
-                <span>제목</span>
-                <span>날짜</span>
-                <span>관리</span>
+              <div className="grid gap-4 md:grid-cols-2">
+                <input
+                  value={conferenceForm.title}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+                  placeholder="학술대회명"
+                />
+                <input
+                  value={conferenceForm.period}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, period: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="개최일 또는 기간"
+                />
+                <input
+                  value={conferenceForm.place}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, place: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="장소"
+                />
+                <input
+                  value={conferenceForm.papers}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, papers: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="논문 수"
+                />
+                <input
+                  value={conferenceForm.presenters}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, presenters: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="발표자 수"
+                />
+                <input
+                  value={conferenceForm.cost}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, cost: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+                  placeholder="개최 비용"
+                />
               </div>
 
-              {sortedNoticePosts.map((item) => (
-                <div
-                  key={item.id}
-                  className="grid grid-cols-[110px_1fr_110px_130px] items-center border-b border-slate-100 px-6 py-5 text-sm last:border-b-0"
-                >
-                  <span className="text-slate-500">{item.isNotice ? "공지" : item.category}</span>
-
-                  <button
-                    type="button"
-                    onClick={() => setSelectedPost(item)}
-                    className="text-left font-medium text-slate-800 hover:text-[#6f0f14] hover:underline"
-                  >
-                    {item.title}
-                  </button>
-
-                  <span className="text-slate-500">{item.date}</span>
-
-                  <div className="flex gap-2">
-                    {session ? (
-                      <>
-                        <button
-                          onClick={() => openEditNotice(item)}
-                          className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                        >
-                          수정
-                        </button>
-                        <button
-                          onClick={() => deleteNotice(item.id)}
-                          className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                        >
-                          삭제
-                        </button>
-                      </>
-                    ) : (
-                      <span className="text-xs text-slate-400">-</span>
-                    )}
-                  </div>
-                </div>
-              ))}
+              <FormActions onSave={saveConference} onCancel={cancelEdit} />
             </div>
+          )}
 
-            <div className="bg-white border border-slate-200 p-8 shadow-sm">
-              <h3 className="text-2xl font-bold text-[#6f0f14] mb-6">게시글 상세</h3>
+          {session && mode !== "list" && activeTab === "performance" && (
+            <div className="mt-8 bg-white border border-slate-200 p-6 shadow-sm">
+              <p className="text-sm font-medium text-[#8c6b2f] mb-4">
+                {mode === "edit" ? "연구소 수행 현황 수정" : "연구소 수행 현황 추가"}
+              </p>
 
-              {selectedPost ? (
-                <>
-                  <div className="flex items-center gap-3">
-                    <span className="bg-[#f9f4ec] px-3 py-1 text-xs font-medium text-[#6f0f14]">
-                      {selectedPost.isNotice ? "공지" : selectedPost.category}
-                    </span>
-                    <span className="text-sm text-slate-500">{selectedPost.date}</span>
-                  </div>
-
-                  <h4 className="mt-4 text-2xl font-bold text-slate-800">
-                    {selectedPost.title}
-                  </h4>
-
-                  <div className="mt-6 bg-[#f9f4ec] p-6 text-base leading-8 text-slate-700 whitespace-pre-wrap">
-                    {selectedPost.content}
-                  </div>
-                </>
-              ) : (
-                <EmptyState
-                  title="게시글을 선택해 주세요"
-                  desc="왼쪽 목록에서 제목을 클릭하면 상세 내용이 표시됩니다."
+              <div className="grid gap-4 md:grid-cols-2">
+                <input
+                  value={performanceForm.type}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, type: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="구분"
                 />
-              )}
-            </div>
-          </div>
-        )}
+                <input
+                  value={performanceForm.manager}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, manager: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="책임자"
+                />
+                <input
+                  value={performanceForm.title}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+                  placeholder="연구과제명"
+                />
+                <input
+                  value={performanceForm.researchers}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, researchers: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연구원 수"
+                />
+                <input
+                  value={performanceForm.period}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, period: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연구기간"
+                />
+                <input
+                  value={performanceForm.supportType}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, supportType: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="지원구분"
+                />
+                <input
+                  value={performanceForm.budget}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, budget: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연구비"
+                />
+                <input
+                  value={performanceForm.agency}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, agency: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
+                  placeholder="지원기관"
+                />
+              </div>
 
-        {activeTab === "history" && (
-          <div className="bg-white border border-slate-200 shadow-sm overflow-hidden">
-            <div className="grid grid-cols-[140px_1fr_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
-              <span>연월</span>
-              <span>연혁</span>
-              <span>관리</span>
+              <FormActions onSave={savePerformance} onCancel={cancelEdit} />
             </div>
-            {historyItems.map((item) => (
-              <div
-                key={item.id}
-                className="grid grid-cols-[140px_1fr_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
-              >
-                <span className="text-slate-600">{item.ym}</span>
-                <span className="text-slate-800">{item.content}</span>
-                <div className="flex gap-2">
-                  {session ? (
+          )}
+
+          <div className="mt-8">
+            {activeTab === "notice" && (
+              <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr]">
+                <div className="overflow-hidden bg-white border border-slate-200 shadow-sm">
+                  <div className="grid grid-cols-[110px_1fr_110px_130px] border-b border-slate-200 bg-[#f9f4ec] px-6 py-4 text-sm font-medium text-slate-500">
+                    <span>분류</span>
+                    <span>제목</span>
+                    <span>날짜</span>
+                    <span>관리</span>
+                  </div>
+
+                  {sortedNoticePosts.map((item) => (
+                    <div
+                      key={item.id}
+                      className="grid grid-cols-[110px_1fr_110px_130px] items-center border-b border-slate-100 px-6 py-5 text-sm last:border-b-0"
+                    >
+                      <span className="text-slate-500">
+                        {item.is_notice ? "공지" : item.category}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => setSelectedPost(item)}
+                        className="text-left font-medium text-slate-800 hover:text-[#6f0f14] hover:underline"
+                      >
+                        {item.title}
+                      </button>
+
+                      <span className="text-slate-500">{formatDate(item.created_at)}</span>
+
+                      <div className="flex gap-2">
+                        {session ? (
+                          <>
+                            <button
+                              onClick={() => openEditNotice(item)}
+                              className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={() => deleteNotice(item.id)}
+                              className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                            >
+                              삭제
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-xs text-slate-400">-</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-white border border-slate-200 p-8 shadow-sm">
+                  <h3 className="text-2xl font-bold text-[#6f0f14] mb-6">게시글 상세</h3>
+
+                  {selectedPost ? (
                     <>
-                      <button
-                        onClick={() => openEditHistory(item)}
-                        className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                      >
-                        수정
-                      </button>
-                      <button
-                        onClick={() => deleteHistory(item.id)}
-                        className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                      >
-                        삭제
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <span className="bg-[#f9f4ec] px-3 py-1 text-xs font-medium text-[#6f0f14]">
+                          {selectedPost.is_notice ? "공지" : selectedPost.category}
+                        </span>
+                        <span className="text-sm text-slate-500">
+                          {formatDate(selectedPost.created_at)}
+                        </span>
+                      </div>
+
+                      <h4 className="mt-4 text-2xl font-bold text-slate-800">
+                        {selectedPost.title}
+                      </h4>
+
+                      <div className="mt-6 bg-[#f9f4ec] p-6 text-base leading-8 text-slate-700 whitespace-pre-wrap">
+                        {selectedPost.content}
+                      </div>
                     </>
                   ) : (
-                    <span className="text-xs text-slate-400">-</span>
+                    <EmptyState
+                      title="게시글을 선택해 주세요"
+                      desc="왼쪽 목록에서 제목을 클릭하면 상세 내용이 표시됩니다."
+                    />
                   )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {activeTab === "conference" && (
-          <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
-            <div className="min-w-[1120px]">
-              <div className="grid grid-cols-[1.8fr_160px_180px_100px_100px_120px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
-                <span>학술대회명</span>
-                <span>개최일</span>
-                <span>장소</span>
-                <span>논문 수</span>
-                <span>발표자 수</span>
-                <span>비용</span>
-                <span>관리</span>
-              </div>
-
-              {conferenceItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="grid grid-cols-[1.8fr_160px_180px_100px_100px_120px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
-                >
-                  <span className="text-slate-800">{item.title}</span>
-                  <span className="text-slate-600">{item.period}</span>
-                  <span className="text-slate-600">{item.place}</span>
-                  <span className="text-slate-600">{item.papers}</span>
-                  <span className="text-slate-600">{item.presenters}</span>
-                  <span className="text-slate-600">{item.cost}</span>
-                  <div className="flex gap-2">
-                    {session ? (
-                      <>
-                        <button
-                          onClick={() => openEditConference(item)}
-                          className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                        >
-                          수정
-                        </button>
-                        <button
-                          onClick={() => deleteConference(item.id)}
-                          className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                        >
-                          삭제
-                        </button>
-                      </>
-                    ) : (
-                      <span className="text-xs text-slate-400">-</span>
-                    )}
-                  </div>
+            {activeTab === "history" && (
+              <div className="bg-white border border-slate-200 shadow-sm overflow-hidden">
+                <div className="grid grid-cols-[140px_1fr_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+                  <span>연월</span>
+                  <span>연혁</span>
+                  <span>관리</span>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === "performance" && (
-          <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
-            <div className="min-w-[1360px]">
-              <div className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_180px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
-                <span>구분</span>
-                <span>연구과제명</span>
-                <span>책임자</span>
-                <span>연구원 수</span>
-                <span>연구기간</span>
-                <span>지원구분</span>
-                <span>연구비</span>
-                <span>지원기관</span>
-                <span>관리</span>
-              </div>
-
-              {performanceItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_180px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
-                >
-                  <span className="text-slate-600">{item.type}</span>
-                  <span className="text-slate-800">{item.title}</span>
-                  <span className="text-slate-600">{item.manager}</span>
-                  <span className="text-slate-600">{item.researchers}</span>
-                  <span className="text-slate-600">{item.period}</span>
-                  <span className="text-slate-600">{item.supportType}</span>
-                  <span className="text-slate-600">{item.budget}</span>
-                  <span className="text-slate-600">{item.agency}</span>
-                  <div className="flex gap-2">
-                    {session ? (
-                      <>
-                        <button
-                          onClick={() => openEditPerformance(item)}
-                          className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                        >
-                          수정
-                        </button>
-                        <button
-                          onClick={() => deletePerformance(item.id)}
-                          className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
-                        >
-                          삭제
-                        </button>
-                      </>
-                    ) : (
-                      <span className="text-xs text-slate-400">-</span>
-                    )}
+                {historyItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="grid grid-cols-[140px_1fr_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+                  >
+                    <span className="text-slate-600">{item.ym}</span>
+                    <span className="text-slate-800">{item.content}</span>
+                    <div className="flex gap-2">
+                      {session ? (
+                        <>
+                          <button
+                            onClick={() => openEditHistory(item)}
+                            className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                          >
+                            수정
+                          </button>
+                          <button
+                            onClick={() => deleteHistory(item.id)}
+                            className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                          >
+                            삭제
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-xs text-slate-400">-</span>
+                      )}
+                    </div>
                   </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === "conference" && (
+              <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
+                <div className="min-w-[1120px]">
+                  <div className="grid grid-cols-[1.8fr_160px_180px_100px_100px_120px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+                    <span>학술대회명</span>
+                    <span>개최일</span>
+                    <span>장소</span>
+                    <span>논문 수</span>
+                    <span>발표자 수</span>
+                    <span>비용</span>
+                    <span>관리</span>
+                  </div>
+
+                  {conferenceItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="grid grid-cols-[1.8fr_160px_180px_100px_100px_120px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+                    >
+                      <span className="text-slate-800">{item.title}</span>
+                      <span className="text-slate-600">{item.period}</span>
+                      <span className="text-slate-600">{item.place}</span>
+                      <span className="text-slate-600">{item.papers}</span>
+                      <span className="text-slate-600">{item.presenters}</span>
+                      <span className="text-slate-600">{item.cost}</span>
+                      <div className="flex gap-2">
+                        {session ? (
+                          <>
+                            <button
+                              onClick={() => openEditConference(item)}
+                              className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={() => deleteConference(item.id)}
+                              className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                            >
+                              삭제
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-xs text-slate-400">-</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {activeTab === "performance" && (
+              <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
+                <div className="min-w-[1360px]">
+                  <div className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_180px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+                    <span>구분</span>
+                    <span>연구과제명</span>
+                    <span>책임자</span>
+                    <span>연구원 수</span>
+                    <span>연구기간</span>
+                    <span>지원구분</span>
+                    <span>연구비</span>
+                    <span>지원기관</span>
+                    <span>관리</span>
+                  </div>
+
+                  {performanceItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_180px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+                    >
+                      <span className="text-slate-600">{item.type}</span>
+                      <span className="text-slate-800">{item.title}</span>
+                      <span className="text-slate-600">{item.manager}</span>
+                      <span className="text-slate-600">{item.researchers}</span>
+                      <span className="text-slate-600">{item.period}</span>
+                      <span className="text-slate-600">{item.supportType}</span>
+                      <span className="text-slate-600">{item.budget}</span>
+                      <span className="text-slate-600">{item.agency}</span>
+                      <div className="flex gap-2">
+                        {session ? (
+                          <>
+                            <button
+                              onClick={() => openEditPerformance(item)}
+                              className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={() => deletePerformance(item.id)}
+                              className="border border-slate-300 px-3 py-2 text-xs text-slate-700"
+                            >
+                              삭제
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-xs text-slate-400">-</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }
