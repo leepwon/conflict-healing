@@ -185,42 +185,6 @@ const defaultConferences = [
     presenters: "4명",
     cost: "300천원",
   },
-  {
-    id: "c6",
-    title: "2018년도 한국종교학회 춘계학술대회 : 갈등치유와 종교교육",
-    period: "2018-04-20",
-    place: "동국대학교 경주캠퍼스",
-    papers: "8편",
-    presenters: "8명",
-    cost: "0천원",
-  },
-  {
-    id: "c7",
-    title: "전문가 타운홀미팅",
-    period: "2016-12-02",
-    place: "경주 코모도호텔",
-    papers: "0편",
-    presenters: "1명",
-    cost: "0천원",
-  },
-  {
-    id: "c8",
-    title: "연구과제수행을 위한 전문가 포럼",
-    period: "2016-11-28",
-    place: "동국대학교 교수회 회의실",
-    papers: "1편",
-    presenters: "1명",
-    cost: "0천원",
-  },
-  {
-    id: "c9",
-    title: "제4회 갈등치유연구소 콜로퀴움",
-    period: "2016-11-11",
-    place: "동국대학교 교수회 회의실",
-    papers: "1편",
-    presenters: "1명",
-    cost: "0천원",
-  },
 ];
 
 const defaultPerformances = [
@@ -256,39 +220,6 @@ const defaultPerformances = [
     supportType: "기타",
     budget: "533,635천원",
     agency: "한국원자력환경공단",
-  },
-  {
-    id: "p4",
-    type: "단독연구",
-    title: "현 발전소 주변지역 지원제도의 주요 쟁점 파악 및 법정 통합기금 조성 방안 연구",
-    manager: "오영석",
-    researchers: "2명",
-    period: "2013-11-01 ~ 2014-01-31",
-    supportType: "기타",
-    budget: "16,500천원",
-    agency: "에너지경제연구원",
-  },
-  {
-    id: "p5",
-    type: "단독연구",
-    title: "제2기 갈등관리 아카데미 위탁교육",
-    manager: "오영석",
-    researchers: "4명",
-    period: "2013-03-25 ~ 2013-09-27",
-    supportType: "기타",
-    budget: "15,897천원",
-    agency: "방사선환경시민포럼",
-  },
-  {
-    id: "p6",
-    type: "단독연구",
-    title: "방폐장 유치에 따른 경주지역 경제유발 효과와 지역협력 증대방안 연구용역",
-    manager: "오영석",
-    researchers: "4명",
-    period: "2012-07-23 ~ 2012-10-20",
-    supportType: "기타",
-    budget: "27,500천원",
-    agency: "한국방사성폐기물관리공단",
   },
 ];
 
@@ -375,7 +306,6 @@ function Navbar({ session, onLogout }) {
   };
 
   const isActive = (path) => location.pathname === path;
-
   const homeFamilyActive =
     isActive("/") ||
     isActive("/purpose") ||
@@ -393,13 +323,22 @@ function Navbar({ session, onLogout }) {
         </div>
 
         <nav className="flex items-center gap-8 text-sm font-bold text-slate-900">
-          <div className="relative" ref={menuRef}>
+          <div className="relative flex items-center gap-1" ref={menuRef}>
             <button
               type="button"
-              onClick={() => setHomeMenuOpen((prev) => !prev)}
+              onClick={() => moveTo("/")}
               className={homeFamilyActive ? "text-[#7a1318]" : "hover:text-[#7a1318]"}
             >
               홈
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setHomeMenuOpen((prev) => !prev)}
+              className="px-1 hover:text-[#7a1318]"
+              aria-label="홈 하위메뉴 열기"
+            >
+              ▼
             </button>
 
             {homeMenuOpen && (
@@ -485,7 +424,7 @@ function Home() {
       className="min-h-screen bg-cover bg-center"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(0,0,0,0.18), rgba(0,0,0,0.18)), url('/wise-hero.png')",
+          "linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/wise-hero.png')",
       }}
     >
       <div className="min-h-screen flex items-center justify-center text-center text-white px-6">
@@ -582,10 +521,10 @@ function RegulationsPage() {
 ========================= */
 
 function Board({ session }) {
-  const NOTICE_KEY = "dongguk-board-posts-v3";
-  const HISTORY_KEY = "dongguk-history-extra-v3";
-  const CONF_KEY = "dongguk-conference-extra-v3";
-  const PERF_KEY = "dongguk-performance-extra-v3";
+  const NOTICE_KEY = "dongguk-board-posts-v4";
+  const HISTORY_KEY = "dongguk-history-extra-v4";
+  const CONF_KEY = "dongguk-conference-extra-v4";
+  const PERF_KEY = "dongguk-performance-extra-v4";
 
   const [activeTab, setActiveTab] = useState("notice");
   const [isWriting, setIsWriting] = useState(false);
@@ -856,10 +795,7 @@ function Board({ session }) {
               placeholder="내용"
             />
 
-            <CancelButtons
-              onSave={addNoticePost}
-              onCancel={() => setIsWriting(false)}
-            />
+            <CancelButtons onSave={addNoticePost} onCancel={() => setIsWriting(false)} />
           </div>
         </div>
       )}
@@ -884,10 +820,7 @@ function Board({ session }) {
               placeholder="연혁 내용"
             />
 
-            <CancelButtons
-              onSave={addHistoryItem}
-              onCancel={() => setIsWriting(false)}
-            />
+            <CancelButtons onSave={addHistoryItem} onCancel={() => setIsWriting(false)} />
           </div>
         </div>
       )}
@@ -1660,10 +1593,8 @@ export default function App() {
     <Router>
       <div className="min-h-screen bg-[#f8f6f1]">
         <Navbar session={session} onLogout={handleLogout} />
-
         <div className="pt-[96px]">
           <WarningBanner />
-
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/purpose" element={<PurposePage />} />
