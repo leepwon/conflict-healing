@@ -23,6 +23,11 @@ function formatDate(dateValue) {
   ).padStart(2, "0")}`;
 }
 
+function formatYearMonth(ym) {
+  if (!ym) return "-";
+  return ym;
+}
+
 function makeSafeFileName(name) {
   const lastDot = name.lastIndexOf(".");
   const base = lastDot >= 0 ? name.slice(0, lastDot) : name;
@@ -100,6 +105,18 @@ function EmptyState({ title, desc }) {
   );
 }
 
+function PageIntro({ eyebrow, title, desc }) {
+  return (
+    <div className="mb-10">
+      <p className="text-sm tracking-[0.18em] uppercase text-[#8c6b2f] font-semibold">
+        {eyebrow}
+      </p>
+      <h2 className="mt-2 text-4xl font-bold text-[#6f0f14]">{title}</h2>
+      {desc && <p className="mt-4 text-slate-600 leading-8">{desc}</p>}
+    </div>
+  );
+}
+
 /* =========================
    Navbar
 ========================= */
@@ -138,11 +155,7 @@ function Navbar({ session, onLogout }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-300">
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => moveTo("/")}
-          className="text-left"
-        >
+        <button type="button" onClick={() => moveTo("/")} className="text-left">
           <p className="text-xs tracking-[0.12em] text-[#8c6b2f]">
             DONGGUK UNIVERSITY WISE CAMPUS
           </p>
@@ -263,6 +276,17 @@ function HomeCard({ title, desc, to }) {
   );
 }
 
+function HomeStat({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="text-sm uppercase tracking-[0.18em] text-[#8c6b2f] font-semibold">
+        {label}
+      </div>
+      <div className="mt-3 text-4xl font-bold text-[#6f0f14]">{value}</div>
+    </div>
+  );
+}
+
 function Home() {
   return (
     <div>
@@ -317,35 +341,43 @@ function Home() {
       </section>
 
       <section className="bg-white border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid gap-8 md:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 p-8 shadow-sm">
-            <div className="text-sm font-semibold tracking-[0.18em] text-[#8c6b2f] uppercase">
-              Research
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid gap-8 md:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <div className="text-sm font-semibold tracking-[0.18em] text-[#8c6b2f] uppercase">
+                Research
+              </div>
+              <h3 className="mt-3 text-2xl font-bold text-[#6f0f14]">연구</h3>
+              <p className="mt-4 text-slate-600 leading-7">
+                사회갈등의 구조와 현상을 분석하고 치유 중심의 이론과 실천 모델을 개발합니다.
+              </p>
             </div>
-            <h3 className="mt-3 text-2xl font-bold text-[#6f0f14]">연구</h3>
-            <p className="mt-4 text-slate-600 leading-7">
-              사회갈등의 구조와 현상을 분석하고 치유 중심의 이론과 실천 모델을 개발합니다.
-            </p>
+
+            <div className="rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <div className="text-sm font-semibold tracking-[0.18em] text-[#8c6b2f] uppercase">
+                Education
+              </div>
+              <h3 className="mt-3 text-2xl font-bold text-[#6f0f14]">교육</h3>
+              <p className="mt-4 text-slate-600 leading-7">
+                갈등관리 및 협력 촉진에 필요한 전문인력 양성을 위한 교육과 훈련을 제공합니다.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <div className="text-sm font-semibold tracking-[0.18em] text-[#8c6b2f] uppercase">
+                Practice
+              </div>
+              <h3 className="mt-3 text-2xl font-bold text-[#6f0f14]">실천</h3>
+              <p className="mt-4 text-slate-600 leading-7">
+                지역사회와 공공기관의 실제 갈등 현장에 참여하여 대화와 협력의 기반을 지원합니다.
+              </p>
+            </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 p-8 shadow-sm">
-            <div className="text-sm font-semibold tracking-[0.18em] text-[#8c6b2f] uppercase">
-              Education
-            </div>
-            <h3 className="mt-3 text-2xl font-bold text-[#6f0f14]">교육</h3>
-            <p className="mt-4 text-slate-600 leading-7">
-              갈등관리 및 협력 촉진에 필요한 전문인력 양성을 위한 교육과 훈련을 제공합니다.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 p-8 shadow-sm">
-            <div className="text-sm font-semibold tracking-[0.18em] text-[#8c6b2f] uppercase">
-              Practice
-            </div>
-            <h3 className="mt-3 text-2xl font-bold text-[#6f0f14]">실천</h3>
-            <p className="mt-4 text-slate-600 leading-7">
-              지역사회와 공공기관의 실제 갈등 현장에 참여하여 대화와 협력의 기반을 지원합니다.
-            </p>
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
+            <HomeStat label="Research Areas" value="4+" />
+            <HomeStat label="Archive Access" value="24/7" />
+            <HomeStat label="Institute Management" value="DB" />
           </div>
         </div>
       </section>
@@ -392,7 +424,7 @@ function ResearchContentPage() {
           "갈등치유 관리인력 교육",
           "갈등중재 및 협상(공청회 개최 대행 등)",
           "지역사회갈등 해결을 위한 참여와 봉사",
-          "「공공기관의 갈등예방과 해결에 관한 규정」이 규정하는 공공갈등의 분석",
+          "공공갈등 분석 및 협력모델 개발",
         ].map((item) => (
           <div
             key={item}
@@ -463,6 +495,7 @@ function Board({ session }) {
     papers: "",
     presenters: "",
     cost: "",
+    sortDate: "",
   });
 
   const [performanceForm, setPerformanceForm] = useState({
@@ -475,6 +508,7 @@ function Board({ session }) {
     supportType: "",
     budget: "",
     agency: "",
+    researchStartDate: "",
   });
 
   const loadBoardData = async () => {
@@ -485,23 +519,36 @@ function Board({ session }) {
 
     setLoading(true);
 
-    const [
-      noticesRes,
-      historyRes,
-      confRes,
-      perfRes,
-    ] = await Promise.all([
+    const [noticesRes, historyRes, confRes, perfRes] = await Promise.all([
       supabase
         .from("board_notices")
         .select("*")
         .order("is_notice", { ascending: false })
+        .order("created_at", { ascending: false }),
+
+      supabase
+        .from("institute_history")
+        .select("*")
+        .order("ym", { ascending: false }),
+
+      supabase
+        .from("institute_conferences")
+        .select("*")
+        .order("sort_date", { ascending: false, nullsFirst: false })
         .order("id", { ascending: false }),
-      supabase.from("institute_history").select("*").order("id", { ascending: false }),
-      supabase.from("institute_conferences").select("*").order("id", { ascending: false }),
-      supabase.from("institute_performances").select("*").order("id", { ascending: false }),
+
+      supabase
+        .from("institute_performances")
+        .select("*")
+        .order("research_start_date", { ascending: false, nullsFirst: false })
+        .order("id", { ascending: false }),
     ]);
 
-    if (!noticesRes.error) setNoticePosts(noticesRes.data || []);
+    if (!noticesRes.error) {
+      setNoticePosts(noticesRes.data || []);
+      if (!selectedPost && noticesRes.data?.length) setSelectedPost(noticesRes.data[0]);
+    }
+
     if (!historyRes.error) setHistoryItems(historyRes.data || []);
     if (!confRes.error) setConferenceItems(confRes.data || []);
     if (!perfRes.error) {
@@ -509,6 +556,7 @@ function Board({ session }) {
         (perfRes.data || []).map((item) => ({
           ...item,
           supportType: item.support_type || "",
+          researchStartDate: item.research_start_date || "",
         }))
       );
     }
@@ -519,15 +567,6 @@ function Board({ session }) {
   useEffect(() => {
     loadBoardData();
   }, []);
-
-  const sortedNoticePosts = useMemo(() => {
-    return [...noticePosts].sort((a, b) => {
-      if ((a.is_notice ? 1 : 0) !== (b.is_notice ? 1 : 0)) {
-        return (b.is_notice ? 1 : 0) - (a.is_notice ? 1 : 0);
-      }
-      return b.id - a.id;
-    });
-  }, [noticePosts]);
 
   const resetForms = () => {
     setNoticeForm({
@@ -550,6 +589,7 @@ function Board({ session }) {
       papers: "",
       presenters: "",
       cost: "",
+      sortDate: "",
     });
     setPerformanceForm({
       id: null,
@@ -561,6 +601,7 @@ function Board({ session }) {
       supportType: "",
       budget: "",
       agency: "",
+      researchStartDate: "",
     });
   };
 
@@ -607,6 +648,7 @@ function Board({ session }) {
       papers: item.papers || "",
       presenters: item.presenters || "",
       cost: item.cost || "",
+      sortDate: item.sort_date || "",
     });
     setMode("edit");
   };
@@ -623,6 +665,7 @@ function Board({ session }) {
       supportType: item.supportType || item.support_type || "",
       budget: item.budget || "",
       agency: item.agency || "",
+      researchStartDate: item.researchStartDate || item.research_start_date || "",
     });
     setMode("edit");
   };
@@ -634,15 +677,17 @@ function Board({ session }) {
       return;
     }
 
+    const payload = {
+      category: noticeForm.category,
+      title: noticeForm.title.trim(),
+      content: noticeForm.content.trim(),
+      is_notice: noticeForm.isNotice,
+    };
+
     if (mode === "edit" && noticeForm.id) {
       const { error } = await supabase
         .from("board_notices")
-        .update({
-          category: noticeForm.category,
-          title: noticeForm.title.trim(),
-          content: noticeForm.content.trim(),
-          is_notice: noticeForm.isNotice,
-        })
+        .update(payload)
         .eq("id", noticeForm.id);
 
       if (error) {
@@ -650,12 +695,7 @@ function Board({ session }) {
         return;
       }
     } else {
-      const { error } = await supabase.from("board_notices").insert({
-        category: noticeForm.category,
-        title: noticeForm.title.trim(),
-        content: noticeForm.content.trim(),
-        is_notice: noticeForm.isNotice,
-      });
+      const { error } = await supabase.from("board_notices").insert(payload);
 
       if (error) {
         alert(error.message);
@@ -688,13 +728,15 @@ function Board({ session }) {
       return;
     }
 
+    const payload = {
+      ym: historyForm.ym.trim(),
+      content: historyForm.content.trim(),
+    };
+
     if (mode === "edit" && historyForm.id) {
       const { error } = await supabase
         .from("institute_history")
-        .update({
-          ym: historyForm.ym.trim(),
-          content: historyForm.content.trim(),
-        })
+        .update(payload)
         .eq("id", historyForm.id);
 
       if (error) {
@@ -702,10 +744,7 @@ function Board({ session }) {
         return;
       }
     } else {
-      const { error } = await supabase.from("institute_history").insert({
-        ym: historyForm.ym.trim(),
-        content: historyForm.content.trim(),
-      });
+      const { error } = await supabase.from("institute_history").insert(payload);
 
       if (error) {
         alert(error.message);
@@ -726,6 +765,7 @@ function Board({ session }) {
       alert(error.message);
       return;
     }
+
     await loadBoardData();
   };
 
@@ -743,6 +783,7 @@ function Board({ session }) {
       papers: conferenceForm.papers,
       presenters: conferenceForm.presenters,
       cost: conferenceForm.cost,
+      sort_date: conferenceForm.sortDate || null,
     };
 
     if (mode === "edit" && conferenceForm.id) {
@@ -757,6 +798,7 @@ function Board({ session }) {
       }
     } else {
       const { error } = await supabase.from("institute_conferences").insert(payload);
+
       if (error) {
         alert(error.message);
         return;
@@ -776,6 +818,7 @@ function Board({ session }) {
       alert(error.message);
       return;
     }
+
     await loadBoardData();
   };
 
@@ -795,6 +838,7 @@ function Board({ session }) {
       support_type: performanceForm.supportType,
       budget: performanceForm.budget,
       agency: performanceForm.agency,
+      research_start_date: performanceForm.researchStartDate || null,
     };
 
     if (mode === "edit" && performanceForm.id) {
@@ -809,6 +853,7 @@ function Board({ session }) {
       }
     } else {
       const { error } = await supabase.from("institute_performances").insert(payload);
+
       if (error) {
         alert(error.message);
         return;
@@ -828,17 +873,42 @@ function Board({ session }) {
       alert(error.message);
       return;
     }
+
     await loadBoardData();
   };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-24">
+      <PageIntro
+        eyebrow="Board"
+        title="게시판"
+        desc="연구소 공지, 연혁, 학술대회 현황, 연구소 수행 현황을 관리할 수 있습니다."
+      />
+
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-sm tracking-[0.18em] uppercase text-[#8c6b2f] font-semibold">
-            Board
-          </p>
-          <h2 className="mt-2 text-4xl font-bold text-[#6f0f14]">게시판</h2>
+        <div className="flex flex-wrap gap-3">
+          {[
+            ["notice", "공지사항"],
+            ["history", "연구소 연혁"],
+            ["conference", "학술대회 개최 현황"],
+            ["performance", "연구소 수행 현황"],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => {
+                setActiveTab(key);
+                setMode("list");
+              }}
+              className={`px-5 py-3 text-sm font-bold border ${
+                activeTab === key
+                  ? "bg-[#6f0f14] text-white border-[#6f0f14]"
+                  : "bg-white text-slate-700 border-slate-300"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         {session && mode === "list" && (
@@ -849,31 +919,6 @@ function Board({ session }) {
             데이터 추가
           </button>
         )}
-      </div>
-
-      <div className="mt-8 flex flex-wrap gap-3">
-        {[
-          ["notice", "공지사항"],
-          ["history", "연구소 연혁"],
-          ["conference", "학술대회 개최 현황"],
-          ["performance", "연구소 수행 현황"],
-        ].map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => {
-              setActiveTab(key);
-              setMode("list");
-            }}
-            className={`px-5 py-3 text-sm font-bold border ${
-              activeTab === key
-                ? "bg-[#6f0f14] text-white border-[#6f0f14]"
-                : "bg-white text-slate-700 border-slate-300"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
       </div>
 
       {loading ? (
@@ -986,11 +1031,20 @@ function Board({ session }) {
                   placeholder="개최일 또는 기간"
                 />
                 <input
+                  type="date"
+                  value={conferenceForm.sortDate}
+                  onChange={(e) =>
+                    setConferenceForm((prev) => ({ ...prev, sortDate: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="정렬 기준 날짜"
+                />
+                <input
                   value={conferenceForm.place}
                   onChange={(e) =>
                     setConferenceForm((prev) => ({ ...prev, place: e.target.value }))
                   }
-                  className="border border-slate-300 px-4 py-3 outline-none"
+                  className="border border-slate-300 px-4 py-3 outline-none md:col-span-2"
                   placeholder="장소"
                 />
                 <input
@@ -1055,20 +1109,32 @@ function Board({ session }) {
                   placeholder="연구과제명"
                 />
                 <input
-                  value={performanceForm.researchers}
-                  onChange={(e) =>
-                    setPerformanceForm((prev) => ({ ...prev, researchers: e.target.value }))
-                  }
-                  className="border border-slate-300 px-4 py-3 outline-none"
-                  placeholder="연구원 수"
-                />
-                <input
                   value={performanceForm.period}
                   onChange={(e) =>
                     setPerformanceForm((prev) => ({ ...prev, period: e.target.value }))
                   }
                   className="border border-slate-300 px-4 py-3 outline-none"
                   placeholder="연구기간"
+                />
+                <input
+                  type="date"
+                  value={performanceForm.researchStartDate}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({
+                      ...prev,
+                      researchStartDate: e.target.value,
+                    }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연구 시작일"
+                />
+                <input
+                  value={performanceForm.researchers}
+                  onChange={(e) =>
+                    setPerformanceForm((prev) => ({ ...prev, researchers: e.target.value }))
+                  }
+                  className="border border-slate-300 px-4 py-3 outline-none"
+                  placeholder="연구원 수"
                 />
                 <input
                   value={performanceForm.supportType}
@@ -1111,7 +1177,7 @@ function Board({ session }) {
                     <span>관리</span>
                   </div>
 
-                  {sortedNoticePosts.map((item) => (
+                  {noticePosts.map((item) => (
                     <div
                       key={item.id}
                       className="grid grid-cols-[110px_1fr_110px_130px] items-center border-b border-slate-100 px-6 py-5 text-sm last:border-b-0"
@@ -1198,7 +1264,7 @@ function Board({ session }) {
                     key={item.id}
                     className="grid grid-cols-[140px_1fr_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
                   >
-                    <span className="text-slate-600">{item.ym}</span>
+                    <span className="text-slate-600">{formatYearMonth(item.ym)}</span>
                     <span className="text-slate-800">{item.content}</span>
                     <div className="flex gap-2">
                       {session ? (
@@ -1227,10 +1293,11 @@ function Board({ session }) {
 
             {activeTab === "conference" && (
               <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
-                <div className="min-w-[1120px]">
-                  <div className="grid grid-cols-[1.8fr_160px_180px_100px_100px_120px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+                <div className="min-w-[1200px]">
+                  <div className="grid grid-cols-[1.8fr_180px_150px_180px_100px_100px_120px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
                     <span>학술대회명</span>
-                    <span>개최일</span>
+                    <span>정렬일</span>
+                    <span>개최일/기간</span>
                     <span>장소</span>
                     <span>논문 수</span>
                     <span>발표자 수</span>
@@ -1241,9 +1308,10 @@ function Board({ session }) {
                   {conferenceItems.map((item) => (
                     <div
                       key={item.id}
-                      className="grid grid-cols-[1.8fr_160px_180px_100px_100px_120px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+                      className="grid grid-cols-[1.8fr_180px_150px_180px_100px_100px_120px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
                     >
                       <span className="text-slate-800">{item.title}</span>
+                      <span className="text-slate-600">{formatDate(item.sort_date)}</span>
                       <span className="text-slate-600">{item.period}</span>
                       <span className="text-slate-600">{item.place}</span>
                       <span className="text-slate-600">{item.papers}</span>
@@ -1277,13 +1345,14 @@ function Board({ session }) {
 
             {activeTab === "performance" && (
               <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
-                <div className="min-w-[1360px]">
-                  <div className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_180px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
+                <div className="min-w-[1440px]">
+                  <div className="grid grid-cols-[110px_1.8fr_120px_120px_180px_150px_120px_120px_180px_130px] bg-[#f9f4ec] border-b border-slate-200 px-6 py-4 text-sm font-medium text-slate-500">
                     <span>구분</span>
                     <span>연구과제명</span>
                     <span>책임자</span>
                     <span>연구원 수</span>
                     <span>연구기간</span>
+                    <span>연구 시작일</span>
                     <span>지원구분</span>
                     <span>연구비</span>
                     <span>지원기관</span>
@@ -1293,13 +1362,16 @@ function Board({ session }) {
                   {performanceItems.map((item) => (
                     <div
                       key={item.id}
-                      className="grid grid-cols-[110px_1.8fr_100px_100px_180px_110px_120px_180px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
+                      className="grid grid-cols-[110px_1.8fr_120px_120px_180px_150px_120px_120px_180px_130px] border-b border-slate-100 px-6 py-4 text-sm last:border-b-0"
                     >
                       <span className="text-slate-600">{item.type}</span>
                       <span className="text-slate-800">{item.title}</span>
                       <span className="text-slate-600">{item.manager}</span>
                       <span className="text-slate-600">{item.researchers}</span>
                       <span className="text-slate-600">{item.period}</span>
+                      <span className="text-slate-600">
+                        {formatDate(item.researchStartDate || item.research_start_date)}
+                      </span>
                       <span className="text-slate-600">{item.supportType}</span>
                       <span className="text-slate-600">{item.budget}</span>
                       <span className="text-slate-600">{item.agency}</span>
@@ -1554,46 +1626,45 @@ function ArchiveList({ session }) {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-24">
+      <PageIntro
+        eyebrow="Archive"
+        title="자료실"
+        desc="자료 목록을 확인하고 상세 페이지에서 다운로드할 수 있습니다."
+      />
+
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-sm tracking-[0.18em] uppercase text-[#8c6b2f] font-semibold">
-            Archive
-          </p>
-          <h2 className="mt-2 text-4xl font-bold text-slate-900">자료실</h2>
+        <div className="w-full border-t border-[#a5b84b] pt-10">
+          <div className="flex justify-end gap-2">
+            <select
+              value={searchField}
+              onChange={(e) => setSearchField(e.target.value)}
+              className="border border-slate-300 px-4 py-2 bg-white text-sm"
+            >
+              <option value="title">제목</option>
+              <option value="all">제목+파일명</option>
+            </select>
+
+            <input
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              placeholder="검색어를 입력하세요"
+              className="w-64 border border-slate-300 px-4 py-2 text-sm"
+            />
+
+            <button className="bg-[#97b12c] px-5 py-2 text-sm font-bold text-white">
+              검색
+            </button>
+          </div>
         </div>
 
         {session && mode === "list" && (
           <button
             onClick={openCreate}
-            className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white"
+            className="bg-[#6f0f14] px-6 py-3 text-sm font-bold text-white shrink-0"
           >
             글쓰기
           </button>
         )}
-      </div>
-
-      <div className="mt-10 border-t border-[#a5b84b] pt-10">
-        <div className="flex justify-end gap-2">
-          <select
-            value={searchField}
-            onChange={(e) => setSearchField(e.target.value)}
-            className="border border-slate-300 px-4 py-2 bg-white text-sm"
-          >
-            <option value="title">제목</option>
-            <option value="all">제목+파일명</option>
-          </select>
-
-          <input
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            placeholder="검색어를 입력하세요"
-            className="w-64 border border-slate-300 px-4 py-2 text-sm"
-          />
-
-          <button className="bg-[#97b12c] px-5 py-2 text-sm font-bold text-white">
-            검색
-          </button>
-        </div>
       </div>
 
       {session && mode !== "list" && (
@@ -1771,14 +1842,13 @@ function ArchiveDetail() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-24">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm tracking-[0.18em] uppercase text-[#8c6b2f] font-semibold">
-            Archive Detail
-          </p>
-          <h2 className="mt-2 text-4xl font-bold text-slate-900">자료 상세</h2>
-        </div>
+      <PageIntro
+        eyebrow="Archive Detail"
+        title="자료 상세"
+        desc="자료 내용을 확인한 후 다운로드할 수 있습니다."
+      />
 
+      <div className="flex justify-end">
         <button
           onClick={() => navigate("/archive")}
           className="border border-slate-300 px-5 py-3 text-sm font-bold text-slate-700"
@@ -1927,7 +1997,11 @@ function Admin({ session }) {
 
   return (
     <div className="max-w-xl mx-auto px-6 py-24">
-      <h2 className="text-3xl font-bold text-[#6f0f14] mb-8">관리자</h2>
+      <PageIntro
+        eyebrow="Admin"
+        title="관리자"
+        desc="로그인 및 비밀번호 변경을 관리합니다."
+      />
 
       {!session ? (
         <div className="bg-white border border-slate-200 p-6 shadow-sm space-y-4">
